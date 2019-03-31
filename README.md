@@ -1,7 +1,7 @@
 muRty
 ================
 
-This is a convenience package with one goal: allow users to obtain multiple solutions to the assignment problem (up to `!n`).
+This is a convenience package with one goal: enable users to obtain multiple solutions to the assignment problem (up to `!n`).
 
 It implements Murty's algorithm as outlined in \[1\]. It is mostly written in `base`; for solving the assignment it uses `lpSolve`.
 
@@ -12,7 +12,7 @@ Example
 
 The input matrix has to be a square matrix (`N x N`).
 
-If you pass anything else it attempts to convert it to matrix. Usually this should work for common formats (`data frame`, `data.table` or `tibble`).
+In terms of classes, if you pass anything else it attempts to convert it to matrix. Usually this should work for common formats (`data frame`, `data.table` or `tibble`).
 
 ``` r
 set.seed(1)
@@ -32,12 +32,16 @@ mat <- matrix(sample.int(15, 10*10, TRUE), 10, 10)
     ##  [9,]   10    6   14   11   11   10    2   12    4    13
     ## [10,]    1   12    6    7   11    7   14   15    3    10
 
-Then you need to call the function `get_k_best`. It returns a list with two sublists: `solutions` (which contains matrices of 0s and 1s as solutions) and `objectives` (which contains the costs of involved solutions).
+Then you need to call the `get_k_best` function.
+
+Usually you will only need to specify `mat` (matrix) and `k_best` (desired number of scenarios) arguments.
+
+It returns a list containing two additional lists: `solutions` (which contains matrices of 0s and 1s as solutions) and `objectives` (which contains the costs of involved solutions).
 
 ``` r
-sols <- get_k_best(mat, 3)
+k_best <- get_k_best(mat = mat, k_best = 3)
 
-head(sols$solutions, 1)
+head(k_best$solutions, 1) # Best solution
 ```
 
     ## [[1]]
@@ -54,26 +58,24 @@ head(sols$solutions, 1)
     ## [10,]    1    0    0    0    0    0    0    0    0     0
 
 ``` r
-head(sols$objectives, 1)
+head(k_best$objectives, 1) # The cost of best solution
 ```
 
     ## [[1]]
     ## [1] 25
 
-Note that it uses a proxy for *Inf*: 10e06.
+The solutions and costs are sorted from best to worst (i.e. those with the lowest cost to those with the highest cost).
 
-In case you work with weights that are relatively close to that (also considering the matrix size), you should modify it properly via the `proxy_Inf` argument.
+Normally, there should be more possible solutions to your problem than what you have selected in `k_best`. If not, the function outputs a warning.
 
-In case more solutions are specified as desired than what is actually possible, it returns all possible solutions together with a warning.
-
-Let's take for example a small matrix from \[2\].
+To show the full output (i.e. structure of the list returned), let's take a small matrix used as an example of Murty's algorithm in \[2\]:
 
     ##      V1 V2 V3
     ## [1,]  0  5 99
     ## [2,]  6  1  3
     ## [3,]  7  4  2
 
-If we specify 10 desired solutions, we get a warning:
+If we specify 10 desired solutions, we get a warning, and all possible solutions are returned (`!3 = 6`):
 
 ``` r
 get_k_best(mat, 10)
@@ -139,6 +141,16 @@ get_k_best(mat, 10)
     ## $objectives[[6]]
     ## [1] 109
 
+In the latter case it also happened that there were partitions that could not be further partitioned.
+
+This has been tested and in such case the implementation jumps to another branch.
+
+Note that the package uses a proxy for *Inf*: 10e06.
+
+In case you work with weights that are relatively close to that (also considering the matrix size), you should modify it properly *via* the `proxy_Inf` argument.
+
+------------------------------------------------------------------------
+
 \[1\] Murty, K. (1968). An Algorithm for Ranking all the Assignments in Order of Increasing Cost. *Operations Research, 16*(3), 682-687. Retrieved from <http://www.jstor.org/stable/168595>
 
-\[2\] Burkard, R., Dell'Amico, M., Martello, S. (2009). *Assignment Problems*. Philadelphia, PA: Society for Industrial and Applied Mathematics.
+\[2\] Burkard, R., Dell'Amico, M., Martello, S. (2009). *Assignment Problems*. Philadelphia, PA: Society for Industrial and Applied Mathematics, pp. 160-61.
