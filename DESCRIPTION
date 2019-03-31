@@ -1,0 +1,18 @@
+Package: muRty
+Type: Package
+Title: Murty's algorithm for k-best assignments
+Version: 0.1.0
+Authors@R: person("Aljaz", "Jelenko", email = "aljaz.jelenko@amis.net",
+                  role = c("aut", "cre"))
+Author: Aljaz Jelenko <aljaz.jelenko@amis.net>
+Maintainer: Aljaz Jelenko <aljaz.jelenko@amis.net>
+Description: Calculates k-best scenarios for an assignment problem and returns solutions and costs.
+License: MIT + file LICENSE
+Depends: R (>= 3.1.0)
+Imports: lpSolve
+Encoding: UTF-8
+LazyData: true
+Suggests: testthat
+RoxygenNote: 6.1.1
+NeedsCompilation: no
+Packaged: 2019-03-31 17:12:53 UTC; Aljaz

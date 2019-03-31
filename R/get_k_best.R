@@ -1,0 +1,236 @@
+#' Murty's algorithm for K-best assignments
+#'
+#' Find K-best assignments for a given matrix (returns both solved matrices and costs)
+#'
+#' @param mat Square matrix (N x N) with weights as values
+#' @param k_best How many best scenarios should be returned
+#' @param proxy_Inf What should be considered as a proxy for Inf? Defaults to 10e06.
+#'
+#' @return A list with solutions and objective values.
+#'
+#' @examples
+#'
+#' set.seed(1)
+#' mat <- matrix(sample.int(15, 10*10, TRUE), 10, 10)
+#'
+#' get_k_best(mat, 3)
+#'
+#' @export
+get_k_best <- function(mat, k_best = NULL, proxy_Inf = 10e06L) {
+
+  if (!any(class(mat) %in% "matrix")) {
+
+    warning("You haven't provided an object of class matrix. Attempting to convert to matrix ..")
+
+    mat <- as.matrix(mat)
+
+  }
+
+  if (dim(mat)[1] != dim(mat)[2]) {
+
+    stop("Number of rows and number of columns are not equal. You need to provide a square matrix (N x N).")
+
+  }
+
+  if (nrow(mat) <= 2) {
+
+    stop("Have you provided an empty set or matrix with only a single value? Your matrix should have at least 2 rows and 2 columns.")
+
+  }
+
+  # Stripping the dimension names - column names need to be V1, V2, V3 .. in order to reconstruct the full matrix
+
+  attr(mat, "dimnames") <- NULL
+  colnames(mat) <- paste0("V", 1:ncol(mat))
+
+  # Initializing the first solution and all the lists needed
+
+  i = 1
+
+  # Here we store solutions and costs
+
+  all_solutions <- list()
+  all_objectives <- list()
+
+  # Here we store all full matrices and objectives that are re-checked at each step for minimum cost matrices
+
+  fullMats <- list()
+  fullObjs <- list()
+
+  # Here we store partial solutions for partitions (as well as partitions)
+
+  partialSols <- list()
+  partitionsAll <- list()
+
+  # Here we store all the columns needed to add to partitions in order to reconstruct the full matrix
+
+  colsToAddAll <- list()
+  colsToAdd <- NA
+
+  mat <- as.matrix(mat)
+
+  # Number of all possible solutions is the factorial
+
+  n_possible <- factorial(nrow(mat))
+
+  nextMat <- mat
+
+  # First assignment with lpSolve and storage in all_solutions (solved matrix) and all_objectives (cost)
+
+  assignm <- lpSolve::lp.assign(mat)
+
+  all_solutions[[i]] <- assignm$solution
+
+  all_objectives[[i]] <- assignm$objval
+
+  curr_solution <- assignm$solution
+  full_solution <- curr_solution
+
+  # While loop which stops as soon we reach the iteration that is equal to desired number of best scenarios or as soon we reach the n_possible
+
+  while (i < k_best) {
+
+    # Getting indices of rows & columns of initial solution's matches
+    #
+    # This serves as a basis for partitioning as defined in Murty (1968)
+
+    idx <- which(curr_solution > 0, arr.ind = T)
+    idx <- idx[order(idx[, 1]), ]
+    idx <- idx[-nrow(idx),]
+
+    if (!is.null(nrow(idx))) {
+
+      idxStrike <- lapply(1:(nrow(idx) - 1), function(x) idx[1:x, ])
+
+      idxmaxSubs <- lapply(1:nrow(idx), function(x) idx[x, ])
+
+    } else {
+
+      idxStrike <- NA
+      idxmaxSubs <- idx
+
+    }
+
+    # See the related functions in insertInfStrike.R
+    #
+    # Basically, we create a list with n - 1 partitions as described in Murty's article
+    #
+    # We always assign the proxy_Inf to last element, and strike the rows and columns of matches before
+
+    matSub <- PartitionAndInsertInf(idx, nextMat, idxmaxSubs, proxy_Inf)
+    matSub <- strikeRwsCols(matSub, idxStrike)
+
+    # Just a check if the solution would make sense at all (there can be only 1 proxy_Inf per row and column)
+
+    matCheck <- c(
+      which(lapply(matSub, function(x) any(rowSums(x == proxy_Inf) == ncol(x))) == TRUE),
+      which(lapply(matSub, function(x) any(colSums(x == proxy_Inf) == nrow(x))) == TRUE)
+    )
+
+    if (length(matCheck) > 0) {
+
+      matSub <- matSub[-matCheck]
+
+    }
+
+    # If there is at least one partition left, execute
+
+    if (length(matSub) > 0) {
+
+      partitionsAll <- c(partitionsAll, matSub)
+
+      # Solve each of the partitions and store in a list
+
+      algoList <- lapply(matSub, lpSolve::lp.assign)
+
+      partialSols <- c(partialSols, lapply(1:length(algoList), function(x) algoList[[x]]$solution))
+
+      # Check which columns are missing from the partitions, store in a list for each one
+
+      colsToAddAll <- c(
+        colsToAddAll,
+        lapply(1:length(matSub),
+               function(x) setdiff(c(1:ncol(mat)), substr(colnames(matSub[[x]]), 2, nchar(colnames(matSub[[x]])))
+               )
+        )
+      )
+
+      # Reconstruct partition and/or full matrix if partition != full matrix
+      #
+      # See the related functions in reconstructInitialPartition.R
+
+      reconstructedPartition <- reconstructPartition(algoList, idx, idxStrike, curr_solution, nextMat)
+
+      if (nrow(reconstructedPartition[[1]]) != nrow(mat)) {
+
+        reconstructedPartition <- reconstructInitial(reconstructedPartition, colsToAdd, full_solution)
+
+      }
+
+      # For each reconstructed full matrix, check the objective value by comparing to initial matrix (mat)
+
+      fullObjsTmp <- lapply(1:length(reconstructedPartition), function(x) {
+
+        objval <- sum(mat[which(reconstructedPartition[[x]] > 0, arr.ind = T)])
+
+      })
+
+      # Store in lists
+
+      fullMats <- c(fullMats, reconstructedPartition)
+      fullObjs <- c(fullObjs, fullObjsTmp)
+
+    }
+
+    # Check fullObjs for the minimum cost, the next iteration uses it as starting basis
+
+    idxMin <- which.min(fullObjs)
+
+    # Initialize the next iteration
+
+    i = i + 1
+
+    # Store the corresponding full matrix & related information into variables needed for each iteration
+
+    full_solution <- fullMats[[idxMin]]
+    curr_solution <- partialSols[[idxMin]]
+    nextMat <- partitionsAll[[idxMin]]
+    colsToAdd <- colsToAddAll[[idxMin]]
+
+    # Store in lists returned by the function
+
+    all_solutions[[i]] <- fullMats[[idxMin]]
+    attr(all_solutions[[i]], "dimnames") <- NULL
+
+    all_objectives[[i]] <- fullObjs[[idxMin]]
+
+    # Remove the chosen solution from lists
+
+    fullMats <- fullMats[-idxMin]
+    fullObjs <- fullObjs[-idxMin]
+    partialSols <- partialSols[-idxMin]
+    partitionsAll <- partitionsAll[-idxMin]
+    colsToAddAll <- colsToAddAll[-idxMin]
+
+    if (length(all_solutions) == n_possible) {
+
+      warning(
+        paste0(
+          "There are only ", n_possible, " possible solutions - terminating earlier."
+        )
+      )
+
+      break
+
+    }
+
+  }
+
+  return(
+    list(
+      solutions = lapply(all_solutions, round),
+      objectives = all_objectives
+    )
+  )
+
+}
