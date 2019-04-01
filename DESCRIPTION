@@ -13,4 +13,4 @@ LazyData: true
 Suggests: testthat
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2019-04-01 16:02:16 UTC; Aljaz
+Packaged: 2019-04-01 16:35:25 UTC; Aljaz

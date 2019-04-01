@@ -232,17 +232,21 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
     partialSols <- partialSols[-idxOpt]
     partitionsAll <- partitionsAll[-idxOpt]
     colsToAddAll <- colsToAddAll[-idxOpt]
-
-    if (length(all_solutions) == n_possible) {
-
+    
+    if (
+      
+      (length(all_solutions) == n_possible) & (k_best > n_possible) 
+      
+      ) {
+      
       warning(
         paste0(
           "There are only ", n_possible, " possible solutions - terminating earlier."
         )
       )
-
+      
       break
-
+      
     }
 
   }
