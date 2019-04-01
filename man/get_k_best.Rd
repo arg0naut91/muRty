@@ -4,17 +4,20 @@
 \alias{get_k_best}
 \title{Murty's algorithm for K-best assignments}
 \usage{
-get_k_best(mat, k_best = NULL, proxy_Inf = 10000000L)
+get_k_best(mat, k_best = NULL, objective = "min",
+  proxy_Inf = 10000000L)
 }
 \arguments{
 \item{mat}{Square matrix (N x N) with weights as values}
 
 \item{k_best}{How many best scenarios should be returned}
 
-\item{proxy_Inf}{What should be considered as a proxy for Inf? Defaults to 10e06.}
+\item{objective}{Should the cost be minimized ('min') or maximized ('max')? Defaults to minimum.}
+
+\item{proxy_Inf}{What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.}
 }
 \value{
-A list with solutions and objective values.
+A list with solutions and costs (objective values).
 }
 \description{
 Find K-best assignments for a given matrix (returns both solved matrices and costs)

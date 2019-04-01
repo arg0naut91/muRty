@@ -21,7 +21,7 @@ test_that("Murty's algorithm functions as expected with data frames", {
                                           structure(c(0, 1, 0, 1, 0, 0, 0, 0, 1), .Dim = c(3L, 3L)),
                                           structure(c(0, 0, 1, 1, 0, 0, 0, 1, 0), .Dim = c(3L, 3L)),
                                           structure(c(0, 0, 1, 0, 1, 0, 1, 0, 0), .Dim = c(3L, 3L))),
-                         objectives = list(3, 7L, 13L, 15L, 107L))
+                         costs = list(3, 7L, 13L, 15L, 107L))
 
   expect_equal(matTest, expectedOutput)
 
@@ -44,21 +44,41 @@ test_that("Murty's algorithm functions as expected with data frames", {
   matSolLarger <- muRty::get_k_best(matLarger, 70)
   expectedOutput <- 12L
 
-  expect_equal(length(matSolLarger$objectives[matSolLarger$objectives == 29]), expectedOutput)
+  expect_equal(length(matSolLarger$costs[matSolLarger$costs == 29]), expectedOutput)
 
 })
 
 test_that("Murty's algorithm functions as expected with matrices", {
+  
+  skip_on_cran()
 
   set.seed(1)
 
   mat <- matrix(sample.int(15, 10*10, TRUE), 10, 10)
 
   matTest <- muRty::get_k_best(mat, 35)
-  matTest <- length(matTest$objectives[matTest$objectives == 31])
+  matTest <- length(matTest$costs[matTest$costs == 31])
 
   expectedOutput <- 13L
 
   expect_equal(matTest, expectedOutput)
 
+})
+
+test_that("Murty's algorithm functions as expected with data frames and objective max", {
+  
+  mat <- as.matrix(
+    read.table(
+      text = "0 5 99
+      6 1 3
+      7 4 2",
+      header = FALSE)
+  )
+  
+  matTest <- get_k_best(mat, 5, objective = 'max')
+  matTest <- unlist(matTest$costs)
+  expectedOutput <- c(109, 107, 15, 13, 7)
+  
+  expect_equal(matTest, expectedOutput)
+  
 })

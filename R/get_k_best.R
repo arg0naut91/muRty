@@ -4,9 +4,10 @@
 #'
 #' @param mat Square matrix (N x N) with weights as values
 #' @param k_best How many best scenarios should be returned
-#' @param proxy_Inf What should be considered as a proxy for Inf? Defaults to 10e06.
+#' @param objective Should the cost be minimized ('min') or maximized ('max')? Defaults to minimum.
+#' @param proxy_Inf What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.
 #'
-#' @return A list with solutions and objective values.
+#' @return A list with solutions and costs (objective values).
 #'
 #' @examples
 #'
@@ -16,7 +17,7 @@
 #' get_k_best(mat, 3)
 #'
 #' @export
-get_k_best <- function(mat, k_best = NULL, proxy_Inf = 10e06L) {
+get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L) {
 
   if (!any(class(mat) %in% "matrix")) {
 
@@ -46,7 +47,19 @@ get_k_best <- function(mat, k_best = NULL, proxy_Inf = 10e06L) {
   # Initializing the first solution and all the lists needed
 
   i = 1
-
+  
+  # If the cost should be maximized, reverse the sign of Inf proxy; reverse also if there is a negative Inf in 'min'
+  
+  if (
+    
+    (objective == 'max' & proxy_Inf > 0) | (objective == 'min' & proxy_Inf < 0)
+    
+    ) {
+    
+    proxy_Inf <- -proxy_Inf
+    
+  }
+  
   # Here we store solutions and costs
 
   all_solutions <- list()
@@ -77,7 +90,7 @@ get_k_best <- function(mat, k_best = NULL, proxy_Inf = 10e06L) {
 
   # First assignment with lpSolve and storage in all_solutions (solved matrix) and all_objectives (cost)
 
-  assignm <- lpSolve::lp.assign(mat)
+  assignm <- lpSolve::lp.assign(mat, direction = objective)
 
   all_solutions[[i]] <- assignm$solution
 
@@ -141,7 +154,7 @@ get_k_best <- function(mat, k_best = NULL, proxy_Inf = 10e06L) {
 
       # Solve each of the partitions and store in a list
 
-      algoList <- lapply(matSub, lpSolve::lp.assign)
+      algoList <- lapply(matSub, lpSolve::lp.assign, direction = objective)
 
       partialSols <- c(partialSols, lapply(1:length(algoList), function(x) algoList[[x]]$solution))
 
@@ -182,9 +195,17 @@ get_k_best <- function(mat, k_best = NULL, proxy_Inf = 10e06L) {
 
     }
 
-    # Check fullObjs for the minimum cost, the next iteration uses it as starting basis
-
-    idxMin <- which.min(fullObjs)
+    # Check fullObjs for the (remaining) optimal (minimum/maximum) cost, the next iteration uses it as starting basis
+    
+    if (objective == 'min') {
+      
+      idxOpt <- which.min(fullObjs)
+      
+    } else {
+      
+      idxOpt <- which.max(fullObjs)
+      
+    }
 
     # Initialize the next iteration
 
@@ -192,25 +213,25 @@ get_k_best <- function(mat, k_best = NULL, proxy_Inf = 10e06L) {
 
     # Store the corresponding full matrix & related information into variables needed for each iteration
 
-    full_solution <- fullMats[[idxMin]]
-    curr_solution <- partialSols[[idxMin]]
-    nextMat <- partitionsAll[[idxMin]]
-    colsToAdd <- colsToAddAll[[idxMin]]
+    full_solution <- fullMats[[idxOpt]]
+    curr_solution <- partialSols[[idxOpt]]
+    nextMat <- partitionsAll[[idxOpt]]
+    colsToAdd <- colsToAddAll[[idxOpt]]
 
     # Store in lists returned by the function
 
-    all_solutions[[i]] <- fullMats[[idxMin]]
+    all_solutions[[i]] <- fullMats[[idxOpt]]
     attr(all_solutions[[i]], "dimnames") <- NULL
 
-    all_objectives[[i]] <- fullObjs[[idxMin]]
+    all_objectives[[i]] <- fullObjs[[idxOpt]]
 
     # Remove the chosen solution from lists
 
-    fullMats <- fullMats[-idxMin]
-    fullObjs <- fullObjs[-idxMin]
-    partialSols <- partialSols[-idxMin]
-    partitionsAll <- partitionsAll[-idxMin]
-    colsToAddAll <- colsToAddAll[-idxMin]
+    fullMats <- fullMats[-idxOpt]
+    fullObjs <- fullObjs[-idxOpt]
+    partialSols <- partialSols[-idxOpt]
+    partitionsAll <- partitionsAll[-idxOpt]
+    colsToAddAll <- colsToAddAll[-idxOpt]
 
     if (length(all_solutions) == n_possible) {
 
@@ -229,7 +250,7 @@ get_k_best <- function(mat, k_best = NULL, proxy_Inf = 10e06L) {
   return(
     list(
       solutions = lapply(all_solutions, round),
-      objectives = all_objectives
+      costs = all_objectives
     )
   )
 
