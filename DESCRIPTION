@@ -4,7 +4,9 @@ Title: Murty's Algorithm for k-Best Assignments
 Version: 0.1.1
 Author: Aljaz Jelenko <aljaz.jelenko@amis.net>
 Maintainer: Aljaz Jelenko <aljaz.jelenko@amis.net>
+BugReports: https://github.com/arg0naut91/muRty/issues
 Description: Calculates k-best solutions and costs for an assignment problem.
+URL: https://github.com/arg0naut91/muRty
 License: MIT + file LICENSE
 Depends: R (>= 3.1.0)
 Imports: lpSolve
@@ -13,4 +15,4 @@ LazyData: true
 Suggests: testthat
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2019-04-01 17:08:32 UTC; Aljaz
+Packaged: 2019-04-01 21:30:57 UTC; Aljaz
