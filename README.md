@@ -153,9 +153,6 @@ You can modify that behaviour by changing the parameter `objective` to `max`, li
 get_k_best(mat, k_best = 6, objective = 'max')
 ```
 
-    Warning in get_k_best(mat, k_best = 6, objective = "max"): There are only 6
-    possible solutions - terminating earlier.
-
     $solutions
     $solutions[[1]]
          [,1] [,2] [,3]
