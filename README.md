@@ -1,14 +1,14 @@
 muRty
 ================
 
-This is a convenience package with one goal: enable users to obtain multiple solutions to the assignment problem (up to `!n`).
+The package enables users to obtain multiple solutions to the assignment problem (up to `!n`).
 
 It implements Murty's algorithm as outlined in \[1\]. It is mostly written in `base`; for solving the assignment it uses `lpSolve`.
 
-You can install it via `devtools::install_github("arg0naut91/muRty")`.
+You can install it *via* `devtools::install_github("arg0naut91/muRty")`.
 
-Example
--------
+Examples
+--------
 
 The input matrix has to be a square matrix (`N x N`).
 
@@ -36,7 +36,7 @@ Then you need to call the `get_k_best` function.
 
 Usually you will only need to specify `mat` (matrix) and `k_best` (desired number of scenarios) arguments.
 
-It returns a list containing two additional lists: `solutions` (which contains matrices of 0s and 1s as solutions) and `objectives` (which contains the costs of involved solutions).
+It returns a list containing two additional lists: `solutions` (which contains matrices of 0s and 1s as solutions) and `costs` (which contains the costs of corresponding solutions).
 
 ``` r
 k_best <- get_k_best(mat = mat, k_best = 3)
@@ -58,13 +58,13 @@ head(k_best$solutions, 1) # Best solution
     [10,]    1    0    0    0    0    0    0    0    0     0
 
 ``` r
-head(k_best$objectives, 1) # The cost of best solution
+head(k_best$costs, 1) # The cost of best solution
 ```
 
     [[1]]
     [1] 25
 
-The solutions and costs are sorted from best to worst (i.e. those with the lowest cost to those with the highest cost).
+The solutions and costs are sorted from most optimal to least optimal.
 
 Normally, there should be more possible solutions to your problem than what you have selected in `k_best`. If not, the function outputs a warning.
 
@@ -122,32 +122,102 @@ get_k_best(mat, 10)
     [3,]    0    1    0
 
 
-    $objectives
-    $objectives[[1]]
+    $costs
+    $costs[[1]]
     [1] 3
 
-    $objectives[[2]]
+    $costs[[2]]
     [1] 7
 
-    $objectives[[3]]
+    $costs[[3]]
     [1] 13
 
-    $objectives[[4]]
+    $costs[[4]]
     [1] 15
 
-    $objectives[[5]]
+    $costs[[5]]
     [1] 107
 
-    $objectives[[6]]
+    $costs[[6]]
     [1] 109
 
 In the latter case it also happened that there were partitions that could not be further partitioned.
 
 This has been tested and in such case the implementation jumps to another branch.
 
+By default, the function tries to minimize the total cost of assignment.
+
+You can modify that behaviour by changing the parameter `objective` to `max`, like below:
+
+``` r
+get_k_best(mat, k_best = 6, objective = 'max')
+```
+
+    Warning in get_k_best(mat, k_best = 6, objective = "max"): There are only 6
+    possible solutions - terminating earlier.
+
+    $solutions
+    $solutions[[1]]
+         [,1] [,2] [,3]
+    [1,]    0    0    1
+    [2,]    1    0    0
+    [3,]    0    1    0
+
+    $solutions[[2]]
+         [,1] [,2] [,3]
+    [1,]    0    0    1
+    [2,]    0    1    0
+    [3,]    1    0    0
+
+    $solutions[[3]]
+         [,1] [,2] [,3]
+    [1,]    0    1    0
+    [2,]    0    0    1
+    [3,]    1    0    0
+
+    $solutions[[4]]
+         [,1] [,2] [,3]
+    [1,]    0    1    0
+    [2,]    1    0    0
+    [3,]    0    0    1
+
+    $solutions[[5]]
+         [,1] [,2] [,3]
+    [1,]    1    0    0
+    [2,]    0    0    1
+    [3,]    0    1    0
+
+    $solutions[[6]]
+         [,1] [,2] [,3]
+    [1,]    1    0    0
+    [2,]    0    1    0
+    [3,]    0    0    1
+
+
+    $costs
+    $costs[[1]]
+    [1] 109
+
+    $costs[[2]]
+    [1] 107
+
+    $costs[[3]]
+    [1] 15
+
+    $costs[[4]]
+    [1] 13
+
+    $costs[[5]]
+    [1] 7
+
+    $costs[[6]]
+    [1] 3
+
 Note that the package uses a proxy for *Inf*: 10e06.
 
 In case you work with weights that are relatively close to that (also considering the matrix size), you should modify it properly *via* the `proxy_Inf` argument.
+
+There is no need to modify the `proxy_Inf` argument if the `objective` is changed to `max`; the reversal of the sign is done automatically.
 
 ------------------------------------------------------------------------
 
