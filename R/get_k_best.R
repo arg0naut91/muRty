@@ -1,10 +1,10 @@
-#' Murty's algorithm for K-best assignments
+#' Murty's algorithm for k-best assignments
 #'
-#' Find K-best assignments for a given matrix (returns both solved matrices and costs)
+#' Find k-best assignments for a given matrix (returns both solved matrices and costs).
 #'
-#' @param mat Square matrix (N x N) with weights as values
+#' @param mat Square matrix (N x N) in which values represent the weights
 #' @param k_best How many best scenarios should be returned
-#' @param objective Should the cost be minimized ('min') or maximized ('max')? Defaults to minimum.
+#' @param objective Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.
 #' @param proxy_Inf What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.
 #'
 #' @return A list with solutions and costs (objective values).
