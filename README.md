@@ -145,9 +145,9 @@ In the latter case it also happened that there were partitions that could not be
 
 This has been tested and in such case the implementation jumps to another branch.
 
-By default, the function tries to minimize the total cost of assignment.
+By default, the function tries to minimize the total cost of each assignment and outputs a list of *k* assignments with lowest costs.
 
-You can modify that behaviour by changing the parameter `objective` to `max`, like below:
+You can reverse this behaviour by changing the parameter `objective` to `max`, like below:
 
 ``` r
 get_k_best(mat, k_best = 6, objective = 'max')
