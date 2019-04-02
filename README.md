@@ -1,8 +1,6 @@
 muRty
 ================
 
-[![Travis build status](https://travis-ci.org/arg0naut91/muRty.svg?branch=master)](https://travis-ci.org/arg0naut91/muRty)
-
 The package enables users to obtain multiple solutions to the assignment problem (up to `!n`).
 
 It implements Murty's algorithm as outlined in \[1\]. It is mostly written in `base`; for solving the assignment it uses `lpSolve`.
@@ -38,7 +36,7 @@ Then you need to call the `get_k_best` function.
 
 Usually you will only need to specify `mat` (matrix) and `k_best` (desired number of scenarios) arguments.
 
-It returns a list containing two additional lists: `solutions` (which contains matrices of 0s and 1s as solutions) and `costs` (which contains the costs of corresponding solutions).
+It returns a list containing two additional lists: `solutions` (matrices of 0s and 1s as solutions) and `costs` (the costs of corresponding solutions).
 
 ``` r
 k_best <- get_k_best(mat = mat, k_best = 3)
@@ -70,7 +68,7 @@ The solutions and costs are sorted from most optimal to least optimal.
 
 Normally, there should be more possible solutions to your problem than what you have selected in `k_best`. If not, the function outputs a warning.
 
-To show the full output (i.e. structure of the list returned), let's take a small matrix used as an example of Murty's algorithm in \[2\]:
+To show the full output (i.e. structure of the list returned), let's take a small matrix used for demonstration of Murty's algorithm in \[2\]:
 
          V1 V2 V3
     [1,]  0  5 99
