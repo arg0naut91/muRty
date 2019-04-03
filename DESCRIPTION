@@ -1,7 +1,7 @@
 Package: muRty
 Type: Package
 Title: Murty's Algorithm for k-Best Assignments
-Version: 0.1.1
+Version: 0.1.2
 Author: Aljaz Jelenko <aljaz.jelenko@amis.net>
 Maintainer: Aljaz Jelenko <aljaz.jelenko@amis.net>
 BugReports: https://github.com/arg0naut91/muRty/issues
@@ -15,4 +15,4 @@ LazyData: true
 Suggests: testthat
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2019-04-02 15:47:13 UTC; Aljaz
+Packaged: 2019-04-03 07:52:25 UTC; Aljaz

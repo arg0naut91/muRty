@@ -33,7 +33,7 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
 
   }
 
-  if (nrow(mat) <= 2) {
+  if (nrow(mat) < 2) {
 
     stop("Have you provided an empty set or matrix with only a single value? Your matrix should have at least 2 rows and 2 columns.")
 
