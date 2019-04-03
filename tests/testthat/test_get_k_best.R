@@ -1,11 +1,13 @@
 ############################################
 #
-# A short test script for Murty's algorithm
+# Test script for Murty's algorithm
+#
+# Updated on 03/04/2019
 #
 ############################################
 context("get_k_best")
 
-test_that("Murty's algorithm functions as expected with data frames and matrices", {
+test_that("get_k_best functions as expected with data frames and matrices", {
 
   mat <- read.table(
       text = "0 5 99
@@ -19,7 +21,7 @@ test_that("Murty's algorithm functions as expected with data frames and matrices
                                           structure(c(0, 1, 0, 1, 0, 0, 0, 0, 1), .Dim = c(3L, 3L)),
                                           structure(c(0, 0, 1, 1, 0, 0, 0, 1, 0), .Dim = c(3L, 3L)),
                                           structure(c(0, 0, 1, 0, 1, 0, 1, 0, 0), .Dim = c(3L, 3L))),
-                         costs = list(3, 7L, 13L, 15L, 107L))
+                         costs = list(3L, 7L, 13L, 15L, 107L))
 
   expect_equal(matTest, expectedOutput)
   expect_warning(muRty::get_k_best(mat, 5), 
@@ -50,7 +52,7 @@ test_that("Murty's algorithm functions as expected with data frames and matrices
 
 })
 
-test_that("Murty's algorithm functions as expected with data frames, objective max and n_possible < k_best", {
+test_that("get_k_best functions as expected with objective max and n_possible < k_best, no warning for n_possible == k_best", {
   
   mat <- read.table(
       text = "0 5 99
@@ -60,45 +62,34 @@ test_that("Murty's algorithm functions as expected with data frames, objective m
   
   matTest <- muRty::get_k_best(mat, 10, objective = 'max')
   matTest <- unlist(matTest$costs)
-  expectedOutput <- c(109, 107, 15, 13, 7, 3)
+  expectedOutput <- c(109L, 107L, 15L, 13L, 7L, 3L)
   
-  expect_warning(muRty::get_k_best(mat, 10, objective = 'max'), 
-                 "You haven't provided an object of class matrix. Attempting to convert to matrix ..")
+  expect_equal(matTest, expectedOutput)
+
   expect_warning(muRty::get_k_best(mat, 10, objective = 'max'), 
                  paste0("There are only ", factorial(nrow(mat)), " possible solutions - terminating earlier.")
                  )
-  expect_warning(muRty::get_k_best(as.matrix(mat), 6, objective = 'max'), regexp = NA)
   
-  expect_equal(matTest, expectedOutput)
+  expect_warning(muRty::get_k_best(as.matrix(mat), 6, objective = 'max'), regexp = NA)
   
 })
 
-test_that("Murty's algorithm functions as expected with data frames, objective max and n_possible < k_best", {
+test_that("get_k_best throws errors with 1x1 matrices, unequal dimensions, but no error for 2x2", {
   
   mat <- matrix(3, ncol = 1, nrow = 1)
   
-  f1 <- function() {
-    
-    muRty::get_k_best(mat, 2)
-    stop("Have you provided an empty set or matrix with only a single value? Your matrix should have at least 2 rows and 2 columns.")
-    
-  }
-  
   expect_error(
-    f1()
+    muRty::get_k_best(mat, 2), 
+    "Have you provided an empty set or matrix with only a single value? Your matrix should have at least 2 rows and 2 columns.", 
+    fixed = TRUE
     )
   
   mat <- matrix(3, ncol = 5, nrow = 7)
   
-  f2 <- function() {
-    
-    muRty::get_k_best(mat, 2)
-    stop("Number of rows and number of columns are not equal. You need to provide a square matrix (N x N).")
-    
-  }
-  
   expect_error(
-    f2()
+    muRty::get_k_best(mat, 2), 
+    "Number of rows and number of columns are not equal. You need to provide a square matrix (N x N).", 
+    fixed = TRUE
   )
   
   mat <- matrix(3, ncol = 2, nrow = 2)
@@ -107,7 +98,7 @@ test_that("Murty's algorithm functions as expected with data frames, objective m
   
 })
 
-test_that("Murty's algorithm functions as expected with matrices", {
+test_that("get_k_best functions as expected with matrices", {
   
   skip_on_cran()
   
