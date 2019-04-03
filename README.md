@@ -1,5 +1,6 @@
 muRty
 ================
+[![Travis build status](https://travis-ci.org/arg0naut91/muRty.svg?branch=master)](https://travis-ci.org/arg0naut91/muRty) [![codecov](https://codecov.io/gh/arg0naut91/muRty/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/muRty)  
 
 The package enables users to obtain multiple solutions to the assignment problem (up to `!n`).
 
