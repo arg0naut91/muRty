@@ -1,5 +1,6 @@
 muRty
 ================
+
 [![Travis build status](https://travis-ci.org/arg0naut91/muRty.svg?branch=master)](https://travis-ci.org/arg0naut91/muRty) [![codecov](https://codecov.io/gh/arg0naut91/muRty/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/muRty)
 
 The package enables users to obtain multiple solutions to the assignment problem (up to `!n`).
@@ -35,7 +36,7 @@ mat <- matrix(sample.int(15, 10*10, TRUE), 10, 10)
 
 Then you need to call the `get_k_best` function.
 
-Usually you will only need to specify `mat` (matrix) and `k_best` (desired number of scenarios) arguments.
+Usually you will only need to specify `mat` (matrix) and `k_best` (desired number of best scenarios) arguments.
 
 It returns a list containing two additional lists: `solutions` (matrices of 0s and 1s as solutions) and `costs` (the costs of corresponding solutions).
 
