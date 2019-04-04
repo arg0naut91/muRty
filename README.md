@@ -218,8 +218,9 @@ In case you work with weights that are relatively close to that (also considerin
 
 There is no need to modify the `proxy_Inf` argument if the `objective` is changed to `max`; the reversal of the sign is done automatically.
 
-------------------------------------------------------------------------
+References
+----------
 
 \[1\] Murty, K. (1968). An Algorithm for Ranking all the Assignments in Order of Increasing Cost. *Operations Research, 16*(3), 682-687. Retrieved from <http://www.jstor.org/stable/168595>
 
-\[2\] Burkard, R., Dell'Amico, M., Martello, S. (2009). *Assignment Problems*. Philadelphia, PA: Society for Industrial and Applied Mathematics, pp. 160-61.
+\[2\] Burkard, R., Dell'Amico, M., Martello, S. (2009). *Assignment Problems*. Philadelphia, PA: Society for Industrial and Applied Mathematics, 160-61.
