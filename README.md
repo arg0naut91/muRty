@@ -34,7 +34,7 @@ mat <- matrix(sample.int(15, 10*10, TRUE), 10, 10)
      [9,]   10    6   14   11   11   10    2   12    4    13
     [10,]    1   12    6    7   11    7   14   15    3    10
 
-Then you need to call the `get_k_best` function.
+To execute Murty's algorithm, you need to call the `get_k_best` function.
 
 Usually you will only need to specify `mat` (matrix) and `k_best` (desired number of best scenarios) arguments.
 
@@ -43,7 +43,7 @@ It returns a list containing two additional lists: `solutions` (matrices of 0s a
 ``` r
 k_best <- get_k_best(mat = mat, k_best = 3)
 
-head(k_best$solutions, 1) # Best solution
+head(k_best$solutions, 1) # Best solution, always equal to initial output from lpSolve::lp.assign
 ```
 
     [[1]]
@@ -147,7 +147,7 @@ In the latter case it also happened that there were partitions that could not be
 
 This has been tested and in such case the implementation jumps to another branch.
 
-By default, the function tries to minimize the total cost of each assignment and outputs a list of *k* assignments with lowest costs.
+By default - and as foreseen in \[1\] -, the function tries to minimize the total cost of each assignment and outputs a list of *k* assignments with lowest costs.
 
 You can reverse this behaviour by changing the parameter `objective` to `max`, like below:
 
