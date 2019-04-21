@@ -207,10 +207,6 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
       
     }
 
-    # Initialize the next iteration
-
-    i = i + 1
-
     # Store the corresponding full matrix & related information into variables needed for each iteration
 
     full_solution <- fullMats[[idxOpt]]
@@ -219,12 +215,27 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
     colsToAdd <- colsToAddAll[[idxOpt]]
 
     # Store in lists returned by the function
-
-    all_solutions[[i]] <- fullMats[[idxOpt]]
-    attr(all_solutions[[i]], "dimnames") <- NULL
-
-    all_objectives[[i]] <- fullObjs[[idxOpt]]
-
+    
+    sum_dups <- sum(unlist(all_objectives) == fullObjs[[idxOpt]])
+    
+    if (sum_dups > 0) {
+      
+      all_solutions[[i]][[sum_dups + 1]] <- fullMats[[idxOpt]]
+      attr(all_solutions[[i]][[sum_dups + 1]], "dimnames") <- NULL
+      
+      all_objectives[[i]][[sum_dups + 1]] <- fullObjs[[idxOpt]]
+      
+    } else {
+      
+      i = i + 1
+      
+      all_solutions[[i]] <- fullMats[[idxOpt]]
+      attr(all_solutions[[i]], "dimnames") <- NULL
+      
+      all_objectives[[i]] <- fullObjs[[idxOpt]]
+      
+    }
+    
     # Remove the chosen solution from lists
 
     fullMats <- fullMats[-idxOpt]
