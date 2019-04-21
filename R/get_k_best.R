@@ -220,10 +220,22 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
     
     if (sum_dups > 0) {
       
-      all_solutions[[i]][[sum_dups + 1]] <- fullMats[[idxOpt]]
-      attr(all_solutions[[i]][[sum_dups + 1]], "dimnames") <- NULL
+      sum_dups <- sum_dups + 1
       
-      all_objectives[[i]][[sum_dups + 1]] <- fullObjs[[idxOpt]]
+      if (sum_dups == 2) {
+        
+        tmpSolution <- all_solutions[[i]]
+        
+        all_solutions[[i]] <- list()
+        
+        all_solutions[[i]][[1]] <- tmpSolution
+          
+      }
+      
+      all_solutions[[i]][[sum_dups]] <- fullMats[[idxOpt]]
+      attr(all_solutions[[i]][[sum_dups]], "dimnames") <- NULL
+      
+      all_objectives[[i]][sum_dups] <- fullObjs[[idxOpt]]
       
     } else {
       
