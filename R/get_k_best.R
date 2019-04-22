@@ -224,16 +224,17 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
       
       if (sum_dups == 2) {
         
-        tmpSolution <- all_solutions[[i]]
+        tmpFinalSolution <- all_solutions[[i]]
         
         all_solutions[[i]] <- list()
         
-        all_solutions[[i]][[1]] <- tmpSolution
+        all_solutions[[i]][[1]] <- tmpFinalSolution
           
       }
       
       all_solutions[[i]][[sum_dups]] <- fullMats[[idxOpt]]
       attr(all_solutions[[i]][[sum_dups]], "dimnames") <- NULL
+      all_solutions[[i]][[sum_dups]] <- round(all_solutions[[i]][[sum_dups]])
       
       all_objectives[[i]][sum_dups] <- fullObjs[[idxOpt]]
       
@@ -243,6 +244,7 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
       
       all_solutions[[i]] <- fullMats[[idxOpt]]
       attr(all_solutions[[i]], "dimnames") <- NULL
+      all_solutions[[i]] <- round(all_solutions[[i]])
       
       all_objectives[[i]] <- fullObjs[[idxOpt]]
       
@@ -276,7 +278,7 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
 
   return(
     list(
-      solutions = lapply(all_solutions, round),
+      solutions = all_solutions,
       costs = all_objectives
     )
   )
