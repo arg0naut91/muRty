@@ -4,6 +4,7 @@
 #'
 #' @param mat Square matrix (N x N) in which values represent the weights
 #' @param k_best How many best scenarios should be returned
+#' @param by_rank Should the solutions with same cost be counted as one and stored in a sublist? Defaults to FALSE.
 #' @param objective Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.
 #' @param proxy_Inf What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.
 #'
@@ -17,7 +18,7 @@
 #' get_k_best(mat, 3)
 #'
 #' @export
-get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L) {
+get_k_best <- function(mat, k_best = NULL, by_rank = FALSE, objective = 'min', proxy_Inf = 10e06L) {
 
   if (!any(class(mat) %in% "matrix")) {
 
@@ -70,7 +71,7 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
   fullMats <- list()
   fullObjs <- list()
 
-  # Here we store partial solutions for partitions (as well as partitions)
+  # Here we store partial solutions for partitions (as well as partitions themselves)
 
   partialSols <- list()
   partitionsAll <- list()
@@ -214,31 +215,51 @@ get_k_best <- function(mat, k_best = NULL, objective = 'min', proxy_Inf = 10e06L
     nextMat <- partitionsAll[[idxOpt]]
     colsToAdd <- colsToAddAll[[idxOpt]]
 
-    # Store in lists returned by the function
+    # Final storage in lists
     
-    sum_dups <- sum(unlist(all_objectives) == fullObjs[[idxOpt]])
+    # If rank-oriented solution preferred, execute the block after if (by_rank)
+    #
+    # It returns a solution where k_best equals number of unique unlisted costs (duplicates count as 1)
     
-    if (sum_dups > 0) {
+    if (by_rank) {
       
-      sum_dups <- sum_dups + 1
+      sum_dups <- sum(unlist(all_objectives) == fullObjs[[idxOpt]])
       
-      if (sum_dups == 2) {
+      if (sum_dups > 0) {
         
-        tmpFinalSolution <- all_solutions[[i]]
+        sum_dups <- sum_dups + 1
         
-        all_solutions[[i]] <- list()
-        
-        all_solutions[[i]][[1]] <- tmpFinalSolution
+        if (sum_dups == 2) {
           
+          tmpFinalSolution <- all_solutions[[i]]
+          
+          all_solutions[[i]] <- list()
+          
+          all_solutions[[i]][[1]] <- tmpFinalSolution
+          
+        }
+        
+        all_solutions[[i]][[sum_dups]] <- fullMats[[idxOpt]]
+        attr(all_solutions[[i]][[sum_dups]], "dimnames") <- NULL
+        all_solutions[[i]][[sum_dups]] <- round(all_solutions[[i]][[sum_dups]])
+        
+        all_objectives[[i]][sum_dups] <- fullObjs[[idxOpt]]
+        
+      } else {
+        
+        i = i + 1
+        
+        all_solutions[[i]] <- fullMats[[idxOpt]]
+        attr(all_solutions[[i]], "dimnames") <- NULL
+        all_solutions[[i]] <- round(all_solutions[[i]])
+        
+        all_objectives[[i]] <- fullObjs[[idxOpt]]
+        
       }
       
-      all_solutions[[i]][[sum_dups]] <- fullMats[[idxOpt]]
-      attr(all_solutions[[i]][[sum_dups]], "dimnames") <- NULL
-      all_solutions[[i]][[sum_dups]] <- round(all_solutions[[i]][[sum_dups]])
-      
-      all_objectives[[i]][sum_dups] <- fullObjs[[idxOpt]]
-      
     } else {
+      
+      # This executed if by_rank = FALSE (default), it returns a solution where length of unlisted costs equals k_best
       
       i = i + 1
       
