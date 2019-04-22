@@ -16,9 +16,8 @@ written in `base`; for solving the assignment it uses `lpSolve`.
 
 You can install it from CRAN by `install.packages("muRty")`.
 
-[![Development
-version](https://img.shields.io/badge/devel%20version-0.2-brightgreen.svg)](https://github.com/arg0naut91/muRty)
-can be installed *via* `devtools::install_github("arg0naut91/muRty")`.
+Development version can be installed *via*
+`devtools::install_github("arg0naut91/muRty")`.
 
 ## Examples
 
