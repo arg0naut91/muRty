@@ -31,10 +31,10 @@ Let’s take for example a small matrix used for demonstration of Murty’s
 algorithm in \[2\]:
 
 ``` 
-     V1 V2 V3
-[1,]  0  5 99
-[2,]  6  1  3
-[3,]  7  4  2
+     [,1] [,2] [,3]
+[1,]    0    5   99
+[2,]    6    1    3
+[3,]    7    4    2
 ```
 
 To execute Murty’s algorithm, you need to call the `get_k_best`
@@ -307,15 +307,10 @@ get_k_best(mat = mat, k_best = 3, by_rank = TRUE)
     $costs[[3]]
     [1] 28
 
-Note that in the case of multiple solutions with equal cost, you can
+Note that in the case of multiple solutions with equal costs, you can
 retrieve individual solutions by double brackets (`[[`) as they are
 stored in a sublist, and individual costs by single brackets (`[`) as
 they are actually vectors.
-
-For example, you would extract the fourth solution with the cost of 27
-with `solvedlist$solutions[[2]][[4]]` and the corresponding cost by
-`solvedlist$costs[[2]][4]` (provided that you have stored the output
-from `get_k_best` in a list called `solvedlist`).
 
 ### Changing the objective
 
