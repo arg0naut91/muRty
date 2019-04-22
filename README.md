@@ -24,7 +24,7 @@ Development version can be installed *via*
 The input matrix has to be a square matrix (`N x N`).
 
 In terms of classes, if you pass anything else it attempts to convert it
-to matrix. Usually this should work for common formats (`data frame`,
+to matrix. Usually this should work for common formats (`data.frame`,
 `data.table` or `tibble`).
 
 Let’s take for example a small matrix used for demonstration of Murty’s
