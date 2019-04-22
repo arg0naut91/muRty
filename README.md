@@ -131,7 +131,8 @@ equal costs, and you specified you want 3 best solutions, the function
 will output only 3 of the possible ways.
 
 You can change this behaviour by setting the `by_rank` argument to
-`TRUE`.
+`TRUE`. In this context, `rank` is similar to `dense rank` in `SQL`
+(meaning no ranks are skipped).
 
 Consider the following matrix:
 
