@@ -4,13 +4,15 @@
 \alias{get_k_best}
 \title{Murty's algorithm for k-best assignments}
 \usage{
-get_k_best(mat, k_best = NULL, objective = "min",
+get_k_best(mat, k_best = NULL, by_rank = FALSE, objective = "min",
   proxy_Inf = 10000000L)
 }
 \arguments{
 \item{mat}{Square matrix (N x N) in which values represent the weights}
 
 \item{k_best}{How many best scenarios should be returned}
+
+\item{by_rank}{Should the solutions with same cost be counted as one and stored in a sublist? Defaults to FALSE.}
 
 \item{objective}{Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.}
 
