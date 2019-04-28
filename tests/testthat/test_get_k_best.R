@@ -16,14 +16,14 @@ test_that("get_k_best functions as expected with data frames and matrices", {
       header = FALSE)
 
   matTest <- muRty::get_k_best(mat, 5)
-  expectedOutput <- list(solutions = list(structure(c(1, 0, 0, 0, 1, 0, 0, 0, 1), .Dim = c(3L,3L)),
+  expectedOutput1 <- list(solutions = list(structure(c(1, 0, 0, 0, 1, 0, 0, 0, 1), .Dim = c(3L,3L)),
                                           structure(c(1, 0, 0, 0, 0, 1, 0, 1, 0), .Dim = c(3L, 3L)),
                                           structure(c(0, 1, 0, 1, 0, 0, 0, 0, 1), .Dim = c(3L, 3L)),
                                           structure(c(0, 0, 1, 1, 0, 0, 0, 1, 0), .Dim = c(3L, 3L)),
                                           structure(c(0, 0, 1, 0, 1, 0, 1, 0, 0), .Dim = c(3L, 3L))),
                          costs = list(3L, 7L, 13L, 15L, 107L))
 
-  expect_equal(matTest, expectedOutput)
+  expect_equal(matTest, expectedOutput1)
   expect_warning(muRty::get_k_best(mat, 5), 
                  "You haven't provided an object of class matrix. Attempting to convert to matrix ..")
 
@@ -46,9 +46,9 @@ test_that("get_k_best functions as expected with data frames and matrices", {
   attr(matLarger, "dimnames") <- NULL
 
   matSolLarger <- muRty::get_k_best(matLarger, 70)
-  expectedOutput <- 12L
+  expectedOutput2 <- 12L
 
-  expect_equal(length(matSolLarger$costs[matSolLarger$costs == 29]), expectedOutput)
+  expect_equal(length(matSolLarger$costs[matSolLarger$costs == 29]), expectedOutput2)
 
 })
 
@@ -62,9 +62,9 @@ test_that("get_k_best functions as expected with objective max and n_possible < 
   
   matTest <- muRty::get_k_best(mat, 10, objective = 'max')
   matTest <- unlist(matTest$costs)
-  expectedOutput <- c(109L, 107L, 15L, 13L, 7L, 3L)
+  expectedOutput3 <- c(109L, 107L, 15L, 13L, 7L, 3L)
   
-  expect_equal(matTest, expectedOutput)
+  expect_equal(matTest, expectedOutput3)
 
   expect_warning(muRty::get_k_best(mat, 10, objective = 'max'), 
                  paste0("There are only ", factorial(nrow(mat)), " possible solutions - terminating earlier.")
@@ -104,9 +104,9 @@ test_that("by_rank argument functions as expected", {
   
   mat <- matrix(sample.int(15, 10*10, TRUE), 10, 10)
   
-  test_by_rank <- get_k_best(mat, k_best = 3, by_rank = TRUE)
+  test_by_rank <- muRty::get_k_best(mat, k_best = 3, by_rank = TRUE)
   
-  expectedOutput <- list(solutions = list(structure(c(0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  expectedOutput4 <- list(solutions = list(structure(c(0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                                       1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 
                                                       0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 
                                                       0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 
@@ -140,7 +140,7 @@ test_that("by_rank argument functions as expected", {
                                                                                                                                                                                                                                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
                                                                                                                                                                                                                                                   0), .Dim = c(10L, 10L))), costs = list(25, c(27L, 27L, 27L, 27L
                                                                                                                                                                                                                                                   ), 28L))
-  expect_equal(test_by_rank, expectedOutput)
+  expect_equal(test_by_rank, expectedOutput4)
   
 })
 
@@ -155,8 +155,8 @@ test_that("get_k_best functions as expected with matrices", {
   matTest <- muRty::get_k_best(mat, 35)
   matTest <- length(matTest$costs[matTest$costs == 31])
   
-  expectedOutput <- 13L
+  expectedOutput5 <- 13L
   
-  expect_equal(matTest, expectedOutput)
+  expect_equal(matTest, expectedOutput5)
   
 })
