@@ -21,7 +21,7 @@ Development version can be installed *via*
 
 ## Examples
 
-The input matrix has to be a square matrix (`N x N`).
+The input has to be a square matrix (`N x N`).
 
 In terms of classes, if you pass anything else it attempts to convert it
 to matrix. Usually this should work for common formats (`data.frame`,
@@ -117,8 +117,8 @@ This has been tested and in such case the implementation jumps to
 another branch.
 
 The maximum number of possible solutions in the above example is exactly
-6 (`!3 = 6`). If you would have specified a higher `k_best`, it would
-output a warning but still produce all possible solutions.
+6 (`!3 = 6`). If you would specify a higher `k_best`, it would output a
+warning but still produce all possible solutions.
 
 ### Ranked solutions
 
