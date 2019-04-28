@@ -10,7 +10,7 @@ get_k_best(mat, k_best = NULL, by_rank = FALSE, objective = "min",
 \arguments{
 \item{mat}{Square matrix (N x N) in which values represent the weights}
 
-\item{k_best}{How many best scenarios should be returned}
+\item{k_best}{How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks}
 
 \item{by_rank}{Should the solutions with same cost be counted as one and stored in a sublist? Defaults to FALSE.}
 

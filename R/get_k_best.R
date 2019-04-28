@@ -3,7 +3,7 @@
 #' Find k-best assignments for a given matrix (returns both solved matrices and costs).
 #'
 #' @param mat Square matrix (N x N) in which values represent the weights
-#' @param k_best How many best scenarios should be returned
+#' @param k_best How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks
 #' @param by_rank Should the solutions with same cost be counted as one and stored in a sublist? Defaults to FALSE.
 #' @param objective Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.
 #' @param proxy_Inf What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.
@@ -39,6 +39,8 @@ get_k_best <- function(mat, k_best = NULL, by_rank = FALSE, objective = 'min', p
     stop("Have you provided an empty set or matrix with only a single value? Your matrix should have at least 2 rows and 2 columns.")
 
   }
+  
+  if (k_best < 1) { stop("You have provided an invalid value for k_best.") }
 
   # Stripping the dimension names - column names need to be V1, V2, V3 .. in order to reconstruct the full matrix
 
@@ -95,14 +97,16 @@ get_k_best <- function(mat, k_best = NULL, by_rank = FALSE, objective = 'min', p
 
   all_solutions[[i]] <- assignm$solution
 
-  all_objectives[[i]] <- as.integer(assignm$objval)
+  all_objectives[[i]] <- round(assignm$objval, 5)
 
   curr_solution <- assignm$solution
   full_solution <- curr_solution
 
   # While loop which stops as soon we reach the iteration that is equal to desired number of best scenarios or as soon we reach the n_possible
 
-  while (i < k_best) {
+  while (i <= k_best) {
+    
+    if (k_best == 1) { break }
 
     # Getting indices of rows & columns of initial solution's matches
     #
@@ -185,7 +189,7 @@ get_k_best <- function(mat, k_best = NULL, by_rank = FALSE, objective = 'min', p
 
       fullObjsTmp <- lapply(1:length(reconstructedPartition), function(x) {
 
-        objval <- sum(mat[which(reconstructedPartition[[x]] > 0, arr.ind = T)])
+        objval <- round(sum(mat[which(reconstructedPartition[[x]] > 0, arr.ind = T)]), 5)
 
       })
 
@@ -249,6 +253,8 @@ get_k_best <- function(mat, k_best = NULL, by_rank = FALSE, objective = 'min', p
         
         i = i + 1
         
+        if (i > k_best) { break }
+        
         all_solutions[[i]] <- fullMats[[idxOpt]]
         attr(all_solutions[[i]], "dimnames") <- NULL
         all_solutions[[i]] <- round(all_solutions[[i]])
@@ -259,9 +265,11 @@ get_k_best <- function(mat, k_best = NULL, by_rank = FALSE, objective = 'min', p
       
     } else {
       
-      # This executed if by_rank = FALSE (default), it returns a solution where length of unlisted costs equals k_best
+      # This is executed if by_rank = FALSE (default), it returns a solution where length of unlisted costs equals k_best
       
       i = i + 1
+      
+      if (i > k_best) { break }
       
       all_solutions[[i]] <- fullMats[[idxOpt]]
       attr(all_solutions[[i]], "dimnames") <- NULL
@@ -281,15 +289,50 @@ get_k_best <- function(mat, k_best = NULL, by_rank = FALSE, objective = 'min', p
     
     if (
       
-      (length(all_solutions) == n_possible) & (k_best > n_possible) 
+      (by_rank) & (length(unlist(all_objectives)) == n_possible) & (length(all_solutions) < k_best)
       
-      ) {
+    ) {
       
       warning(
         paste0(
-          "There are only ", n_possible, " possible solutions - terminating earlier."
+          "There are ", n_possible, " possible solutions. Final solution has been found at rank number ",
+          length(all_solutions), " which is lower than the k_best specified; terminating here."
         )
       )
+      
+      break
+      
+    } else if (
+      
+      ( (length(all_solutions) == n_possible) | (length(unlist(all_objectives)) == n_possible) ) & (k_best > n_possible) 
+      
+    ) {
+      
+      if (by_rank) {
+        
+        warning(
+          paste0(
+            "There are only ", n_possible, " possible solutions; terminating earlier, stopping at rank ", length(all_solutions), "."
+          )
+        )
+          
+      } else {
+        
+        warning(
+          paste0(
+            "There are only ", n_possible, " possible solutions - terminating earlier."
+          )
+        )
+        
+      }
+      
+      break
+      
+    } else if (
+      
+      ( (by_rank) & (length(unlist(all_objectives)) == n_possible) ) | ( (!by_rank) & (length(all_solutions) == n_possible) )
+      
+    ) {
       
       break
       
