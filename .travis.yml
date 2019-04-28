@@ -13,5 +13,8 @@ os:
 r_packages:
   - covr
 
+before_install:
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install llvm; fi
+
 after_success:
   - Rscript -e 'library(covr); codecov()'
