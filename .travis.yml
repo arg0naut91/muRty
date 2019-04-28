@@ -8,7 +8,7 @@ warnings_are_errors: true
 
 os:
   - linux
-  - osx
+  #- osx Skipping osx build for now since 3.6 breaks the examples based on seed
 
 r_packages:
   - covr
