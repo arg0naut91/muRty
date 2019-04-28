@@ -95,7 +95,7 @@ get_k_best <- function(mat, k_best = NULL, by_rank = FALSE, objective = 'min', p
 
   all_solutions[[i]] <- assignm$solution
 
-  all_objectives[[i]] <- assignm$objval
+  all_objectives[[i]] <- as.integer(assignm$objval)
 
   curr_solution <- assignm$solution
   full_solution <- curr_solution
