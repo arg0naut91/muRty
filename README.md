@@ -153,7 +153,7 @@ Exactly two solutions are returned if we keep the `by_rank` argument
 untouched (i.e. `FALSE` as it is by default):
 
 ``` r
-get_k_best(mat = mat, k_best = 3)
+get_k_best(mat = mat, k_best = 2)
 ```
 
     $solutions
@@ -183,19 +183,6 @@ get_k_best(mat = mat, k_best = 3)
      [9,]    0    0    0    0    1    0    0    0    0     0
     [10,]    0    0    1    0    0    0    0    0    0     0
     
-    $solutions[[3]]
-          [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
-     [1,]    0    0    0    0    0    0    1    0    0     0
-     [2,]    0    0    0    0    0    0    0    1    0     0
-     [3,]    0    1    0    0    0    0    0    0    0     0
-     [4,]    0    0    0    0    0    0    0    0    1     0
-     [5,]    1    0    0    0    0    0    0    0    0     0
-     [6,]    0    0    0    0    1    0    0    0    0     0
-     [7,]    0    0    0    0    0    0    0    0    0     1
-     [8,]    0    0    0    0    0    1    0    0    0     0
-     [9,]    0    0    0    1    0    0    0    0    0     0
-    [10,]    0    0    1    0    0    0    0    0    0     0
-    
     
     $costs
     $costs[[1]]
@@ -203,9 +190,6 @@ get_k_best(mat = mat, k_best = 3)
     
     $costs[[2]]
     [1] 31
-    
-    $costs[[3]]
-    [1] 32
 
 On the other hand, changing this argument to `TRUE` will return 7
 solutions, as there are several solutions with the same cost (and are
