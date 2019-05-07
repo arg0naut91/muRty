@@ -54,7 +54,7 @@ solutions).
 ``` r
 library(muRty)
 
-get_k_best(mat, 6)
+get_k_best(mat = mat, k_best = 6)
 ```
 
     $solutions
@@ -323,7 +323,7 @@ You can reverse this behaviour by changing the parameter `objective` to
 above):
 
 ``` r
-get_k_best(mat, k_best = 6, objective = 'max')
+get_k_best(mat = mat, k_best = 6, objective = 'max')
 ```
 
     $solutions
