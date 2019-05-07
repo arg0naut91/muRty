@@ -30,6 +30,10 @@ to matrix. Usually this should work for common formats (`data.frame`,
 Let’s take for example a small matrix used for demonstration of Murty’s
 algorithm in \[2\]:
 
+``` r
+mat
+```
+
 ``` 
      [,1] [,2] [,3]
 [1,]    0    5   99
