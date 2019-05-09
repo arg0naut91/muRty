@@ -137,6 +137,9 @@ You can change this behaviour by setting the `by_rank` argument to
 `TRUE`. In this context, `rank` is similar to `dense rank` in `SQL`
 (meaning no ranks are skipped).
 
+**Note**: This feature is currently only available in the development
+version (0.2.1).
+
 Consider the following matrix:
 
 ``` 
