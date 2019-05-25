@@ -3,7 +3,7 @@ muRty
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-last-release/muRty)](https://cran.r-project.org/package=muRty)
 [![Development
-version](https://img.shields.io/badge/devel%20version-0.2.1-brightgreen.svg)](https://github.com/arg0naut91/muRty)
+version](https://img.shields.io/badge/devel%20version-0.3.0-brightgreen.svg)](https://github.com/arg0naut91/muRty)
 [![Travis build
 status](https://travis-ci.org/arg0naut91/muRty.svg?branch=master)](https://travis-ci.org/arg0naut91/muRty)
 [![codecov](https://codecov.io/gh/arg0naut91/muRty/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/muRty)
@@ -12,7 +12,12 @@ The package enables users to obtain multiple best solutions to the
 assignment problem (up to `!n`).
 
 It implements Murty’s algorithm as outlined in \[1\]. It is mostly
-written in `base`; for solving the assignment it uses `lpSolve`.
+written in `base`.
+
+For solving the assignment it uses `lpSolve` and linear programming
+(version on CRAN). The development version (0.3.0) allows the use of
+both Hungarian algorithm (as implemented in the `clue` package) and LP.
+In development version, the default algorithm is Hungarian.
 
 You can install it from CRAN by `install.packages("muRty")`.
 
@@ -138,7 +143,7 @@ You can change this behaviour by setting the `by_rank` argument to
 (meaning no ranks are skipped).
 
 **Note**: This feature is currently only available in the development
-version (0.2.1).
+version (0.3.0).
 
 Consider the following matrix:
 
@@ -171,10 +176,10 @@ get_k_best(mat = mat, k_best = 2)
      [3,]    0    1    0    0    0    0    0    0    0     0
      [4,]    0    0    0    0    0    0    0    0    1     0
      [5,]    1    0    0    0    0    0    0    0    0     0
-     [6,]    0    0    0    0    1    0    0    0    0     0
+     [6,]    0    0    0    1    0    0    0    0    0     0
      [7,]    0    0    0    0    0    0    0    0    0     1
      [8,]    0    0    0    0    0    0    1    0    0     0
-     [9,]    0    0    0    1    0    0    0    0    0     0
+     [9,]    0    0    0    0    1    0    0    0    0     0
     [10,]    0    0    1    0    0    0    0    0    0     0
     
     $solutions[[2]]
@@ -184,10 +189,10 @@ get_k_best(mat = mat, k_best = 2)
      [3,]    0    1    0    0    0    0    0    0    0     0
      [4,]    0    0    0    0    0    0    0    0    1     0
      [5,]    1    0    0    0    0    0    0    0    0     0
-     [6,]    0    0    0    1    0    0    0    0    0     0
+     [6,]    0    0    0    0    1    0    0    0    0     0
      [7,]    0    0    0    0    0    0    0    0    0     1
      [8,]    0    0    0    0    0    0    1    0    0     0
-     [9,]    0    0    0    0    1    0    0    0    0     0
+     [9,]    0    0    0    1    0    0    0    0    0     0
     [10,]    0    0    1    0    0    0    0    0    0     0
     
     
@@ -215,10 +220,10 @@ get_k_best(mat = mat, k_best = 2, by_rank = TRUE)
      [3,]    0    1    0    0    0    0    0    0    0     0
      [4,]    0    0    0    0    0    0    0    0    1     0
      [5,]    1    0    0    0    0    0    0    0    0     0
-     [6,]    0    0    0    0    1    0    0    0    0     0
+     [6,]    0    0    0    1    0    0    0    0    0     0
      [7,]    0    0    0    0    0    0    0    0    0     1
      [8,]    0    0    0    0    0    0    1    0    0     0
-     [9,]    0    0    0    1    0    0    0    0    0     0
+     [9,]    0    0    0    0    1    0    0    0    0     0
     [10,]    0    0    1    0    0    0    0    0    0     0
     
     $solutions[[1]][[2]]
@@ -228,10 +233,10 @@ get_k_best(mat = mat, k_best = 2, by_rank = TRUE)
      [3,]    0    1    0    0    0    0    0    0    0     0
      [4,]    0    0    0    0    0    0    0    0    1     0
      [5,]    1    0    0    0    0    0    0    0    0     0
-     [6,]    0    0    0    1    0    0    0    0    0     0
+     [6,]    0    0    0    0    1    0    0    0    0     0
      [7,]    0    0    0    0    0    0    0    0    0     1
      [8,]    0    0    0    0    0    0    1    0    0     0
-     [9,]    0    0    0    0    1    0    0    0    0     0
+     [9,]    0    0    0    1    0    0    0    0    0     0
     [10,]    0    0    1    0    0    0    0    0    0     0
     
     
@@ -243,10 +248,10 @@ get_k_best(mat = mat, k_best = 2, by_rank = TRUE)
      [3,]    0    1    0    0    0    0    0    0    0     0
      [4,]    0    0    0    0    0    0    0    0    1     0
      [5,]    1    0    0    0    0    0    0    0    0     0
-     [6,]    0    0    0    0    1    0    0    0    0     0
+     [6,]    0    0    0    1    0    0    0    0    0     0
      [7,]    0    0    0    0    0    0    0    0    0     1
      [8,]    0    0    0    0    0    1    0    0    0     0
-     [9,]    0    0    0    1    0    0    0    0    0     0
+     [9,]    0    0    0    0    1    0    0    0    0     0
     [10,]    0    0    1    0    0    0    0    0    0     0
     
     $solutions[[2]][[2]]
@@ -269,11 +274,11 @@ get_k_best(mat = mat, k_best = 2, by_rank = TRUE)
      [3,]    0    1    0    0    0    0    0    0    0     0
      [4,]    0    0    0    0    0    0    0    0    1     0
      [5,]    1    0    0    0    0    0    0    0    0     0
-     [6,]    0    0    0    0    1    0    0    0    0     0
+     [6,]    0    0    0    1    0    0    0    0    0     0
      [7,]    0    0    0    0    0    0    0    0    0     1
-     [8,]    0    0    0    1    0    0    0    0    0     0
-     [9,]    0    0    0    0    0    0    1    0    0     0
-    [10,]    0    0    1    0    0    0    0    0    0     0
+     [8,]    0    0    0    0    0    0    1    0    0     0
+     [9,]    0    0    1    0    0    0    0    0    0     0
+    [10,]    0    0    0    0    1    0    0    0    0     0
     
     $solutions[[2]][[4]]
           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
@@ -282,11 +287,11 @@ get_k_best(mat = mat, k_best = 2, by_rank = TRUE)
      [3,]    0    1    0    0    0    0    0    0    0     0
      [4,]    0    0    0    0    0    0    0    0    1     0
      [5,]    1    0    0    0    0    0    0    0    0     0
-     [6,]    0    0    0    1    0    0    0    0    0     0
+     [6,]    0    0    0    0    1    0    0    0    0     0
      [7,]    0    0    0    0    0    0    0    0    0     1
-     [8,]    0    0    0    0    0    0    1    0    0     0
-     [9,]    0    0    1    0    0    0    0    0    0     0
-    [10,]    0    0    0    0    1    0    0    0    0     0
+     [8,]    0    0    0    1    0    0    0    0    0     0
+     [9,]    0    0    0    0    0    0    1    0    0     0
+    [10,]    0    0    1    0    0    0    0    0    0     0
     
     $solutions[[2]][[5]]
           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
@@ -295,10 +300,10 @@ get_k_best(mat = mat, k_best = 2, by_rank = TRUE)
      [3,]    0    1    0    0    0    0    0    0    0     0
      [4,]    0    0    0    0    0    0    0    0    1     0
      [5,]    1    0    0    0    0    0    0    0    0     0
-     [6,]    0    0    0    1    0    0    0    0    0     0
+     [6,]    0    0    0    0    1    0    0    0    0     0
      [7,]    0    0    0    0    0    0    0    0    0     1
      [8,]    0    0    0    0    0    1    0    0    0     0
-     [9,]    0    0    0    0    1    0    0    0    0     0
+     [9,]    0    0    0    1    0    0    0    0    0     0
     [10,]    0    0    1    0    0    0    0    0    0     0
     
     
@@ -394,6 +399,56 @@ considering the matrix size), you should modify it properly *via* the
 
 There is no need to modify the `proxy_Inf` argument if the `objective`
 is changed to `max`; the reversal of the sign is done automatically.
+
+### Hungarian algorithm versus LP
+
+With the version `0.3.0`, the Hungarian algorithm as implemented in the
+`clue` package can be used.
+
+Normally this should be a relatively faster solution as shown with the
+benchmark below.
+
+Note that it is possible to use the Hungarian algorithm with a matrix
+that contains negative values.
+
+The matrix:
+
+``` r
+mat
+```
+
+``` 
+      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+ [1,]   -2   15    8    0    6    8    1    7   13     5
+ [2,]    1    4   -1    4    0    0    5    6   12     9
+ [3,]   -5    8   -1    4    1   -5   11   10   10     4
+ [4,]   -4    4   -4    0   13   13   -2   -5    5    10
+ [5,]    5    1    4    9    4   13    7    7    4    15
+ [6,]    8    3    6   14    0    2    2   15    1     6
+ [7,]   12    9    9   14    8    0   10    0   13     1
+ [8,]   13   15   -5    6   -4    6    8   11   -4    15
+ [9,]   -5   -1   14    0    7    0   14    3    4     2
+[10,]   15    3   -3    2   12    2    1    1   -5    -5
+```
+
+The benchmark:
+
+``` r
+library(microbenchmark)
+
+microbenchmark::microbenchmark(
+  
+  hungarian = { get_k_best(mat, k_best = 50, algo = 'hungarian') },
+  LP = { get_k_best(mat, k_best = 50, algo = 'lp') },
+  times = 100
+  
+)
+```
+
+    Unit: milliseconds
+          expr       min       lq     mean   median       uq      max neval
+     hungarian  96.34001 103.7100 112.3332 106.8083 115.9839 193.7004   100
+            LP 513.07164 526.5181 569.2902 545.9036 569.7631 965.5328   100
 
 ## References
 

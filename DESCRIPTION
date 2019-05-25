@@ -1,7 +1,7 @@
 Package: muRty
 Type: Package
 Title: Murty's Algorithm for k-Best Assignments
-Version: 0.2.1
+Version: 0.3.0
 Author: Aljaz Jelenko
 Maintainer: Aljaz Jelenko <aljaz.jelenko@amis.net>
 BugReports: https://github.com/arg0naut91/muRty/issues
@@ -9,10 +9,10 @@ Description: Calculates k-best solutions and costs for an assignment problem fol
 URL: https://github.com/arg0naut91/muRty
 License: MIT + file LICENSE
 Depends: R (>= 3.1.0)
-Imports: lpSolve
+Imports: clue, lpSolve
 Encoding: UTF-8
 LazyData: true
 Suggests: testthat
-NeedsCompilation: no
 RoxygenNote: 6.1.1
-Packaged: 2019-04-28 20:53:00 UTC; aljaz_000
+NeedsCompilation: no
+Packaged: 2019-05-25 17:43:06 UTC; aljaz_000

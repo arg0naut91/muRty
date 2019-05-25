@@ -4,19 +4,23 @@
 \alias{get_k_best}
 \title{Murty's algorithm for k-best assignments}
 \usage{
-get_k_best(mat, k_best = NULL, by_rank = FALSE, objective = "min",
-  proxy_Inf = 10000000L)
+get_k_best(mat, k_best = NULL, algo = "hungarian", by_rank = FALSE,
+  objective = "min", proxy_Inf = 10000000L, constant = abs(min(mat)))
 }
 \arguments{
 \item{mat}{Square matrix (N x N) in which values represent the weights}
 
 \item{k_best}{How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks}
 
+\item{algo}{Algorithm to be used, either "lp" or "hungarian". Defaults to "hungarian"}
+
 \item{by_rank}{Should the solutions with same cost be counted as one and stored in a sublist? Defaults to FALSE.}
 
 \item{objective}{Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.}
 
 \item{proxy_Inf}{What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.}
+
+\item{constant}{If algo = "hungarian" and there are negative values in the matrix, the value to add to the matrix (normally abs(min(mat))).}
 }
 \value{
 A list with solutions and costs (objective values).
