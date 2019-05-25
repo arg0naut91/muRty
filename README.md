@@ -15,9 +15,11 @@ It implements Murty’s algorithm as outlined in \[1\]. It is mostly
 written in `base`.
 
 For solving the assignment it uses `lpSolve` and linear programming
-(version on CRAN). The development version (0.3.0) allows the use of
-both Hungarian algorithm (as implemented in the `clue` package) and LP.
-In development version, the default algorithm is Hungarian.
+(version on CRAN).
+
+The development version (0.3.0) allows the use of both Hungarian
+algorithm (as implemented in the `clue` package) and LP (with Hungarian
+as default choice).
 
 You can install it from CRAN by `install.packages("muRty")`.
 
@@ -446,9 +448,9 @@ microbenchmark::microbenchmark(
 ```
 
     Unit: milliseconds
-          expr       min       lq     mean   median       uq      max neval
-     hungarian  96.34001 103.7100 112.3332 106.8083 115.9839 193.7004   100
-            LP 513.07164 526.5181 569.2902 545.9036 569.7631 965.5328   100
+          expr       min       lq     mean   median      uq      max neval
+     hungarian  97.33396 105.9324 111.0745 109.7799 112.794 178.9663   100
+            LP 559.72406 580.3749 605.3025 591.3525 614.567 768.1850   100
 
 ## References
 
