@@ -1,3 +1,9 @@
+############################################################################
+#
+# get_k_best variant for non-ranked algorithm based on the LP
+#
+############################################################################
+
 getkBestNoRankLP <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', proxy_InfNR = proxy_Inf) {
   
   if (!any(class(matNR) %in% "matrix")) {

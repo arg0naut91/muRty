@@ -1,4 +1,10 @@
-getkBestNoRankHung <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', proxy_InfNR = proxy_Inf, constantNR = constant) {
+############################################################################
+#
+# get_k_best variant for non-ranked algorithm based on the Hungarian method
+#
+############################################################################
+
+getkBestNoRankHung <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', proxy_InfNR = proxy_Inf, constantNR = abs(min(matNR))) {
   
   if (!any(class(matNR) %in% "matrix")) {
     

@@ -1,3 +1,9 @@
+############################################################################
+#
+# get_k_best variant for ranked algorithm based on the LP
+#
+############################################################################
+
 getkBestRankedLP <- function(matR, k_bestR = NULL, objectiveR = 'min', proxy_InfR = proxy_Inf) {
   
   if (!any(class(matR) %in% "matrix")) {

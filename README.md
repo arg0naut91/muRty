@@ -14,16 +14,14 @@ assignment problem (up to `!n`).
 It implements Murty’s algorithm as outlined in \[1\]. It is mostly
 written in `base`.
 
-For solving the assignment it uses `lpSolve` and linear programming
-(version on CRAN).
+The CRAN version uses linear programming with `lpSolve` for solving the
+assignment. You can install it by `install.packages("muRty")`.
 
-The development version (0.3.0) allows the use of both Hungarian
+The development version (`0.3.0`) allows the use of both Hungarian
 algorithm (as implemented in the `clue` package) and LP (with Hungarian
 as default choice).
 
-You can install it from CRAN by `install.packages("muRty")`.
-
-Development version can be installed *via*
+It can be installed *via*
 `devtools::install_github("arg0naut91/muRty")`.
 
 ## Examples
@@ -145,7 +143,7 @@ You can change this behaviour by setting the `by_rank` argument to
 (meaning no ranks are skipped).
 
 **Note**: This feature is currently only available in the development
-version (0.3.0).
+version (`0.3.0`).
 
 Consider the following matrix:
 
@@ -405,7 +403,7 @@ is changed to `max`; the reversal of the sign is done automatically.
 ### Hungarian algorithm versus LP
 
 With the version `0.3.0`, the Hungarian algorithm as implemented in the
-`clue` package can be used.
+`clue` package is used by default for solving the assignment(s).
 
 Normally this should be a relatively faster solution as shown with the
 benchmark below.
@@ -449,8 +447,8 @@ microbenchmark::microbenchmark(
 
     Unit: milliseconds
           expr       min       lq     mean   median      uq      max neval
-     hungarian  97.33396 105.9324 111.0745 109.7799 112.794 178.9663   100
-            LP 559.72406 580.3749 605.3025 591.3525 614.567 768.1850   100
+     hungarian  98.58766 102.5398 109.9288 106.4404 114.087 172.0963   100
+            LP 515.60272 563.8416 593.0742 576.8493 603.875 970.2255   100
 
 ## References
 

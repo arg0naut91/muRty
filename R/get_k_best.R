@@ -8,7 +8,6 @@
 #' @param by_rank Should the solutions with same cost be counted as one and stored in a sublist? Defaults to FALSE.
 #' @param objective Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.
 #' @param proxy_Inf What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.
-#' @param constant If algo = "hungarian" and there are negative values in the matrix, the value to add to the matrix (normally abs(min(mat))).
 #'
 #' @return A list with solutions and costs (objective values).
 #'
@@ -25,8 +24,7 @@ get_k_best <- function(mat,
                        algo = 'hungarian',
                        by_rank = FALSE,
                        objective = 'min',
-                       proxy_Inf = 10e06L,
-                       constant = abs(min(mat))
+                       proxy_Inf = 10e06L
                        ) {
 
   if (!by_rank) {
@@ -37,7 +35,7 @@ get_k_best <- function(mat,
 
     } else if (algo == "hungarian") {
 
-      solvedMurty <- getkBestNoRankHung(matNR = mat, k_bestNR = k_best, objectiveNR = objective, proxy_InfNR = proxy_Inf, constantNR = constant)
+      solvedMurty <- getkBestNoRankHung(matNR = mat, k_bestNR = k_best, objectiveNR = objective, proxy_InfNR = proxy_Inf, constantNR = abs(min(mat)))
 
     }
 
@@ -49,7 +47,7 @@ get_k_best <- function(mat,
 
     } else if (algo == "hungarian") {
 
-      solvedMurty <- getkBestRankedHung(matR = mat, k_bestR = k_best, objectiveR = objective, proxy_InfR = proxy_Inf, constantR = constant)
+      solvedMurty <- getkBestRankedHung(matR = mat, k_bestR = k_best, objectiveR = objective, proxy_InfR = proxy_Inf, constantR = abs(min(mat)))
 
     }
 
