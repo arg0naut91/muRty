@@ -8,11 +8,11 @@ get_k_best(mat, k_best = NULL, algo = "hungarian", by_rank = FALSE,
   objective = "min", proxy_Inf = 10000000L)
 }
 \arguments{
-\item{mat}{Square matrix (N x N) in which values represent the weights}
+\item{mat}{Square matrix (N x N) in which values represent the weights.}
 
-\item{k_best}{How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks}
+\item{k_best}{How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks.}
 
-\item{algo}{Algorithm to be used, either "lp" or "hungarian". Defaults to "hungarian"}
+\item{algo}{Algorithm to be used, either 'lp' or 'hungarian'; defaults to 'hungarian'.}
 
 \item{by_rank}{Should the solutions with same cost be counted as one and stored in a sublist? Defaults to FALSE.}
 

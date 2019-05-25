@@ -2,9 +2,9 @@
 #'
 #' Find k-best assignments for a given matrix (returns both solved matrices and costs).
 #'
-#' @param mat Square matrix (N x N) in which values represent the weights
-#' @param k_best How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks
-#' @param algo Algorithm to be used, either "lp" or "hungarian". Defaults to "hungarian"
+#' @param mat Square matrix (N x N) in which values represent the weights.
+#' @param k_best How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks.
+#' @param algo Algorithm to be used, either 'lp' or 'hungarian'; defaults to 'hungarian'.
 #' @param by_rank Should the solutions with same cost be counted as one and stored in a sublist? Defaults to FALSE.
 #' @param objective Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.
 #' @param proxy_Inf What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.
