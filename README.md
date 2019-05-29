@@ -14,15 +14,10 @@ assignment problem (up to `!n`).
 It implements Murty’s algorithm as outlined in \[1\]. It is mostly
 written in `base`.
 
-The CRAN version uses linear programming with `lpSolve` for solving the
-assignment. You can install it by `install.packages("muRty")`.
+By default it uses Hungarian algorithm (as implemented in `clue`) for
+solving the assignment.
 
-The development version (`0.3.0`) allows the use of both Hungarian
-algorithm (as implemented in the `clue` package) and LP (with Hungarian
-as default choice).
-
-It can be installed *via*
-`devtools::install_github("arg0naut91/muRty")`.
+You can install it from CRAN by `install.packages("muRty")`.
 
 ## Examples
 
@@ -141,9 +136,6 @@ will output only 3 of the possible ways.
 You can change this behaviour by setting the `by_rank` argument to
 `TRUE`. In this context, `rank` is similar to `dense rank` in `SQL`
 (meaning no ranks are skipped).
-
-**Note**: This feature is currently only available in the development
-version (`0.3.0`).
 
 Consider the following matrix:
 
@@ -446,9 +438,9 @@ microbenchmark::microbenchmark(
 ```
 
     Unit: milliseconds
-          expr       min       lq     mean   median      uq      max neval
-     hungarian  98.58766 102.5398 109.9288 106.4404 114.087 172.0963   100
-            LP 515.60272 563.8416 593.0742 576.8493 603.875 970.2255   100
+          expr       min       lq     mean   median       uq       max neval
+     hungarian  96.86442 103.6745 109.5142 106.9796 113.0150  141.3816   100
+            LP 510.16653 524.4581 562.4886 534.1087 564.4486 1047.1750   100
 
 ## References
 
