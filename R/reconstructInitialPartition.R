@@ -5,15 +5,13 @@
 # It either reconstructs the full matrix (if the current iteration works on partition of full original matrix) -
 # or the partitioned matrix (if the current iteration works on partition of partition of full original matrix)
 #
-# Parameters:
+# @algoList A list of solutions (assignments) of partitions (or partitioned partitions)
+# @idx A truncated list of indices that locate 1s in curr_solution matrix (it excludes the last identified 1)
+# @idxStrike a matrix or named integer storing information about rows and columns that were removed
+# @curr_solution Solved matrix - either initial full matrix, or partition
+# @nextMat If we are solving partitions of original matrix, this equals original matrix, otherwise it equals partition of orig. matrix (the one with minimum cost in iteration)
 #
-# - algoList: A list of solutions (assignments) of partitions (or partitioned partitions)
-# - idx: A truncated list of indices that locate 1s in curr_solution matrix (it excludes the last identified 1)
-# - idxStrike: a matrix or named integer storing information about rows and columns that were removed
-# - curr_solution: Solved matrix - either initial full matrix, or partition
-# - nextMat: If we are solving partitions of original matrix, this equals original matrix, otherwise it equals partition of orig. matrix (the one with minimum cost in iteration)
-#
-# Returns: A list of reconstructed solutions of full solutions / partitioned matrix
+# @return A list of reconstructed solutions of full solutions / partitioned matrix
 #
 ################################
 
@@ -75,13 +73,11 @@ reconstructPartition <- function(algoList, idx, idxStrike, curr_solution, nextMa
 #
 # It reconstructs the full matrix. Used to complement the reconstructPartition function
 #
-# Parameters:
+# @reconstructedPartition Output from reconstructPartition
+# @colsToAdd Columns that are missing from column names of partition
+# @full_solution Full solution that corresponds to partitioned matrix currently in use in the iteration
 #
-# - reconstructedPartition - output from reconstructPartition
-# - colsToAdd - columns that are missing from column names of partition
-# - full_solution - full solution that corresponds to partitioned matrix currently in use in the iteration
-#
-# Returns: A list of reconstructed full solutions
+# @return A list of reconstructed full solutions
 #
 ################################
 

@@ -1,8 +1,17 @@
-############################################################################
+###############################################################################################################################################
 #
-# get_k_best variant for non-ranked algorithm based on the LP
+# Murty's algorithm for k-best assignments
 #
-############################################################################
+# This version is executed when no ranking is needed and when LP (Simplex) is used.
+#
+# @param matNR Square matrix (N x N) in which values represent the weights.
+# @param k_bestNR How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks.
+# @param objectiveNR Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.
+# @param proxy_InfNR What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.
+#
+# @return A list with solutions and costs (objective values).
+#
+###############################################################################################################################################
 
 getkBestNoRankLP <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', proxy_InfNR = proxy_Inf) {
   
@@ -186,15 +195,7 @@ getkBestNoRankLP <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', proxy_
     
     # Check fullObjs for the (remaining) optimal (minimum/maximum) cost, the next iteration uses it as starting basis
     
-    if (objectiveNR == 'min') {
-      
-      idxOpt <- which.min(fullObjs)
-      
-    } else {
-      
-      idxOpt <- which.max(fullObjs)
-      
-    }
+    idxOpt <- if (objectiveNR == 'min') which.min(fullObjs) else which.max(fullObjs)
     
     # Initialize the next iteration
     

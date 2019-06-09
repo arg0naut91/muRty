@@ -1,6 +1,6 @@
 Package: muRty
 Title: Murty's Algorithm for k-Best Assignments
-Version: 0.3.0
+Version: 0.3.1
 Author: Aljaz Jelenko [aut, cre]
 Maintainer: Aljaz Jelenko <aljaz.jelenko@amis.net>
 Description: Calculates k-best solutions and costs for an assignment problem following the method outlined in Murty (1968) <doi:10.1287/opre.16.3.682>.
@@ -14,4 +14,4 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2019-05-25 21:56:22 UTC; aljaz_000
+Packaged: 2019-06-09 11:58:07 UTC; aljaz_000

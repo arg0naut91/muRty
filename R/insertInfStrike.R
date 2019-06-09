@@ -2,15 +2,13 @@
 #
 # PartitionAndInsertInf - A function to 1) create partitions of matrix and 2) insert proxies of infinity (as defined in proxy_Inf) 
 #
-# Parameters:
-#
-# - idx: A truncated list of indices that locate 1s in curr_solution matrix (it excludes the last identified 1)
-# - nextMat: If we are solving partitions of original matrix, this equals original matrix, 
+# @idx A truncated list of indices that locate 1s in curr_solution matrix (it excludes the last identified 1)
+# @nextMat If we are solving partitions of original matrix, this equals original matrix, 
 # otherwise it equals partition of orig. matrix (the one with minimum cost in iteration)
-# - idxmaxSubs: A list of elements of matrix (cells) that need to be overwritten with proxy_Inf per each nextMat
-# - proxy_Inf: Proxy for infinity (defaults to 10e06)
+# @idxmaxSubs A list of elements of matrix (cells) that need to be overwritten with proxy_Inf per each nextMat
+# @proxy_Inf Proxy for infinity (defaults to 10e06)
 #
-# Returns: A list of partitions where relevant cells are overwritten with proxy_Inf
+# @return A list of partitions where relevant cells are overwritten with proxy_Inf
 #
 ################################
 
@@ -58,12 +56,10 @@ PartitionAndInsertInf <- function(idx, nextMat, idxmaxSubs, proxy_Inf) {
 #
 # strikeRwsCols - A function to remove columns and rows per each partition
 #
-# Parameters:
+# @matSub Output from PartitionAndInsertInf
+# @idxStrike a matrix or named integer storing information about rows and columns that were removed
 #
-# - matSub: Output from PartitionAndInsertInf
-# - idxStrike: a matrix or named integer storing information about rows and columns that were removed
-#
-# Returns: A list of partitions where relevant rows and columns have been removed
+# @return A list of partitions where relevant rows and columns have been removed
 #
 ################################
 

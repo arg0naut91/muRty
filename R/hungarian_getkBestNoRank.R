@@ -1,8 +1,18 @@
-############################################################################
+###############################################################################################################################################
 #
-# get_k_best variant for non-ranked algorithm based on the Hungarian method
+# Murty's algorithm for k-best assignments
 #
-############################################################################
+# This version is executed when no ranking is needed and when Hungarian algorithm is used (which makes it a default version).
+#
+# @param matNR Square matrix (N x N) in which values represent the weights.
+# @param k_bestNR How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks.
+# @param objectiveNR Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.
+# @param proxy_InfNR What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.
+# @param constantNR Value to be added in order to avoid negative values in the matrix. Defaults to the minimum value of the matrix.
+#
+# @return A list with solutions and costs (objective values).
+#
+###############################################################################################################################################
 
 getkBestNoRankHung <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', proxy_InfNR = proxy_Inf, constantNR = abs(min(matNR))) {
   
@@ -44,15 +54,7 @@ getkBestNoRankHung <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', prox
   
   # Match objective to relevant clue values
   
-  objectiveNR <- if (objectiveNR == 'min') { 
-    
-    objectiveNR <- FALSE 
-    
-  } else { 
-      
-    objectiveNR <- TRUE 
-    
-    }
+  objectiveNR <- if (objectiveNR == 'min') FALSE else TRUE 
   
   # Initializing the first solution and all the lists needed
   
@@ -98,7 +100,7 @@ getkBestNoRankHung <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', prox
   
   n_possible <- factorial(nrow(matNR))
   
-  # First assignment with lpSolve and storage in all_solutions (solved matrix) and all_objectives (cost)
+  # First assignment with Hungarian (as implemented in clue) and storage in all_solutions (solved matrix) and all_objectives (cost)
   
   assignm <- parseClueOutput(matNR, max = objectiveNR, addConst = checkNegative, addedConst = constantNR)
   
@@ -207,15 +209,7 @@ getkBestNoRankHung <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', prox
     
     # Check fullObjs for the (remaining) optimal (minimum/maximum) cost, the next iteration uses it as starting basis
     
-    if (objectiveNR == FALSE) {
-      
-      idxOpt <- which.min(fullObjs)
-      
-    } else {
-      
-      idxOpt <- which.max(fullObjs)
-      
-    }
+    idxOpt <- if (objectiveNR == FALSE) which.min(fullObjs) else which.max(fullObjs)
     
     # Initialize the next iteration
     
