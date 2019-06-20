@@ -17,7 +17,7 @@ written in `base`.
 By default it uses Hungarian algorithm (as implemented in `clue`) for
 solving the assignment.
 
-You can install it from CRAN by `install.packages("muRty")`.
+You can install it from CRAN by `install.packages('muRty')`.
 
 ## Examples
 
