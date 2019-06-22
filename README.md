@@ -1,4 +1,4 @@
-﻿muRty
+muRty
 ================
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-last-release/muRty)](https://cran.r-project.org/package=muRty)
@@ -430,17 +430,17 @@ library(microbenchmark)
 
 microbenchmark::microbenchmark(
   
-  hungarian = { get_k_best(mat, k_best = 50, algo = 'hungarian') },
-  LP = { get_k_best(mat, k_best = 50, algo = 'lp') },
+  hungarian = get_k_best(mat, k_best = 50, algo = 'hungarian'),
+  LP = get_k_best(mat, k_best = 50, algo = 'lp'),
   times = 100
   
 )
 ```
 
     Unit: milliseconds
-          expr       min       lq     mean   median       uq       max neval
-     hungarian  96.86442 103.6745 109.5142 106.9796 113.0150  141.3816   100
-            LP 510.16653 524.4581 562.4886 534.1087 564.4486 1047.1750   100
+          expr       min       lq     mean   median       uq      max neval
+     hungarian  94.82907 102.6039 109.4582 105.9668 112.1165 184.6351   100
+            LP 529.15388 539.0449 575.1078 552.1317 583.8117 855.3268   100
 
 ## References
 
