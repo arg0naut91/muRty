@@ -426,8 +426,6 @@ mat
 The benchmark:
 
 ``` r
-library(microbenchmark)
-
 microbenchmark::microbenchmark(
   
   hungarian = get_k_best(mat, k_best = 50, algo = 'hungarian'),
@@ -438,9 +436,9 @@ microbenchmark::microbenchmark(
 ```
 
     Unit: milliseconds
-          expr       min       lq     mean   median       uq      max neval
-     hungarian  94.82907 102.6039 109.4582 105.9668 112.1165 184.6351   100
-            LP 529.15388 539.0449 575.1078 552.1317 583.8117 855.3268   100
+          expr      min       lq     mean   median       uq       max neval
+     hungarian  95.5625 102.9558 124.6660 110.1497 129.8756  250.1026   100
+            LP 526.4945 539.6958 614.0864 568.0545 643.5723 1026.8735   100
 
 ## References
 
