@@ -9,7 +9,7 @@ status](https://travis-ci.org/arg0naut91/muRty.svg?branch=master)](https://travi
 [![codecov](https://codecov.io/gh/arg0naut91/muRty/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/muRty)
 
 The package enables users to obtain multiple best solutions to the
-assignment problem (up to `!n`).
+assignment problem (up to `n!`).
 
 It implements Murty’s algorithm as outlined in \[1\]. It is mostly
 written in `base`.
