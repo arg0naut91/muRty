@@ -121,7 +121,7 @@ This has been tested and in such case the implementation jumps to
 another branch.
 
 The maximum number of possible solutions in the above example is exactly
-6 (`!3 = 6`). If you would specify a higher `k_best`, it would output a
+6 (`3! = 6`). If you would specify a higher `k_best`, it would output a
 warning but still produce all possible solutions.
 
 ### Ranked solutions
