@@ -6,10 +6,12 @@ muRty
 version](https://img.shields.io/badge/devel%20version-0.3.1-brightgreen.svg)](https://github.com/arg0naut91/muRty)
 [![Travis build
 status](https://travis-ci.org/arg0naut91/muRty.svg?branch=master)](https://travis-ci.org/arg0naut91/muRty)
+[![Build
+status](https://ci.appveyor.com/api/projects/status/0bjhv26u337evtdw?svg=true)](https://ci.appveyor.com/project/arg0naut91/murty)
 [![codecov](https://codecov.io/gh/arg0naut91/muRty/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/muRty)
 
 The package enables users to obtain multiple best solutions to the
-assignment problem (up to `n!`).
+assignment problem (up to `!n`).
 
 It implements Murty’s algorithm as outlined in \[1\]. It is mostly
 written in `base`.
@@ -121,7 +123,7 @@ This has been tested and in such case the implementation jumps to
 another branch.
 
 The maximum number of possible solutions in the above example is exactly
-6 (`3! = 6`). If you would specify a higher `k_best`, it would output a
+6 (`!3 = 6`). If you would specify a higher `k_best`, it would output a
 warning but still produce all possible solutions.
 
 ### Ranked solutions
@@ -436,9 +438,9 @@ microbenchmark::microbenchmark(
 ```
 
     Unit: milliseconds
-          expr      min       lq     mean   median       uq       max neval
-     hungarian  95.5625 102.9558 124.6660 110.1497 129.8756  250.1026   100
-            LP 526.4945 539.6958 614.0864 568.0545 643.5723 1026.8735   100
+          expr      min        lq      mean   median        uq      max neval
+     hungarian  47.0765  53.63565  58.46828  56.6481  61.05395 101.3439   100
+            LP 232.2676 238.42245 248.42827 243.2006 255.21310 290.5036   100
 
 ## References
 
