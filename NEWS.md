@@ -7,7 +7,7 @@ Very minor changes
 -   Added additional unit tests;
 -   Added descriptions to all functions;
 -   Removed references to `lpsolve` from some of the files;
--   Removed some of the unnecessary assignments within functions.
+-   Removed some of the unnecessary assignments & checks within functions.
 
 muRty 0.3.0
 ===========
