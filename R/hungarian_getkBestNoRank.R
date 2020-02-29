@@ -36,7 +36,7 @@ getkBestNoRankHung <- function(matNR, k_bestNR = NULL, objectiveNR = 'min', prox
     
   }
   
-  if (k_bestNR < 1) { stop("You have provided an invalid value for k_bestNR.") }
+  if (k_bestNR < 1) { stop("You have provided an invalid value for k_best.") }
   
   # Stripping the dimension names - column names need to be V1, V2, V3 .. in order to reconstruct the full matrix
   

@@ -12,6 +12,4 @@ Suggests: testthat
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
-NeedsCompilation: no
-Packaged: 2019-06-09 11:58:07 UTC; aljaz_000
+RoxygenNote: 7.0.2

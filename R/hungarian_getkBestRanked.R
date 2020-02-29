@@ -36,7 +36,7 @@ getkBestRankedHung <- function(matR, k_bestR = NULL, objectiveR = 'min', proxy_I
     
   }
   
-  if (k_bestR < 1) { stop("You have provided an invalid value for k_bestR.") }
+  if (k_bestR < 1) { stop("You have provided an invalid value for k_best.") }
   
   # Stripping the dimension names - column names need to be V1, V2, V3 .. in order to reconstruct the full matrix
   
@@ -277,21 +277,7 @@ getkBestRankedHung <- function(matR, k_bestR = NULL, objectiveR = 'min', proxy_I
       warning(
         paste0(
           "There are ", n_possible, " possible solutions. Final solution has been found at rank number ",
-          length(all_solutions), " which is lower than the k_bestR specified; terminating here."
-        )
-      )
-      
-      break
-      
-    } else if (
-      
-      ( (length(all_solutions) == n_possible) | (length(unlist(all_objectives)) == n_possible) ) & (k_bestR > n_possible) 
-      
-    ) {
-      
-      warning(
-        paste0(
-          "There are only ", n_possible, " possible solutions; terminating earlier, stopping at rank ", length(all_solutions), "."
+          length(all_solutions), " which is lower than the k_best specified; terminating here."
         )
       )
       

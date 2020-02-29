@@ -4,8 +4,14 @@
 \alias{get_k_best}
 \title{Murty's algorithm for k-best assignments}
 \usage{
-get_k_best(mat, k_best = NULL, algo = "hungarian", by_rank = FALSE,
-  objective = "min", proxy_Inf = 10000000L)
+get_k_best(
+  mat,
+  k_best = NULL,
+  algo = "hungarian",
+  by_rank = FALSE,
+  objective = "min",
+  proxy_Inf = 10000000L
+)
 }
 \arguments{
 \item{mat}{Square matrix (N x N) in which values represent the weights.}

@@ -2,7 +2,7 @@
 #
 # Test script for Murty's algorithm
 #
-# Updated on 25/05/2019
+# Updated on 29/02/2020
 #
 ############################################
 context("get_k_best")
@@ -26,6 +26,7 @@ test_that("muRty::get_k_best functions as expected with data frames and matrices
                          costs = list(3, 7, 13, 15, 107))
 
   expect_equal(matTest, expectedOutput1)
+  
   expect_warning(muRty::get_k_best(mat, 5, algo = 'lp'),
                  "You haven't provided an object of class matrix. Attempting to convert to matrix ..")
 
@@ -54,7 +55,7 @@ test_that("muRty::get_k_best functions as expected with data frames and matrices
 
 })
 
-test_that("muRty::get_k_best functions as expected with objective max and n_possible < k_best, no warning for n_possible == k_best (LP)", {
+test_that("muRty::get_k_best functions as expected with objective max and n_possible < k_best (also for by_rank), no warning for n_possible == k_best (LP)", {
 
   mat <- read.table(
       text = "0 5 99
@@ -67,16 +68,24 @@ test_that("muRty::get_k_best functions as expected with objective max and n_poss
   expectedOutput3 <- c(109, 107, 15, 13, 7, 3)
 
   expect_equal(matTest, expectedOutput3)
+  
+  matTestRank <- muRty::get_k_best(mat, 6, objective = 'max', algo = 'lp', by_rank = TRUE)
+  matTest <- unlist(matTestRank$costs)
+  expectedOutput4 <- c(109, 107, 15, 13, 7, 3)
+  
+  expect_equal(matTest, expectedOutput4)
 
   expect_warning(muRty::get_k_best(mat, 10, objective = 'max', algo = 'lp'),
                  paste0("There are only ", factorial(nrow(mat)), " possible solutions - terminating earlier.")
                  )
+  
+  expect_warning(muRty::get_k_best(as.matrix(mat), 10, objective = 'max', algo = 'lp', by_rank = TRUE), regexp = NULL)
 
   expect_warning(muRty::get_k_best(as.matrix(mat), 6, objective = 'max', algo = 'lp'), regexp = NA)
 
 })
 
-test_that("muRty::get_k_best throws errors with 1x1 matrices, unequal dimensions, but no error for 2x2 (LP)", {
+test_that("muRty::get_k_best throws errors with 1x1 matrices, unequal dimensions, k best < 1, but no error for 2x2 (LP)", {
 
   mat <- matrix(3, ncol = 1, nrow = 1)
 
@@ -97,7 +106,35 @@ test_that("muRty::get_k_best throws errors with 1x1 matrices, unequal dimensions
   mat <- matrix(3, ncol = 2, nrow = 2)
 
   expect_error(muRty::get_k_best(mat, 1, algo = 'lp'), regexp = NA)
+  
+  expect_error(muRty::get_k_best(mat, 0, algo = 'lp'), "You have provided an invalid value for k_best.")
 
+})
+
+test_that("muRty::get_k_best throws errors with 1x1 matrices, unequal dimensions, k best < 1, but no error for 2x2 (LP, by rank)", {
+  
+  mat <- matrix(3, ncol = 1, nrow = 1)
+  
+  expect_error(
+    muRty::get_k_best(mat, 2, algo = 'lp', by_rank = TRUE),
+    "Have you provided an empty set or matrix with only a single value? Your matrix should have at least 2 rows and 2 columns.",
+    fixed = TRUE
+  )
+  
+  mat <- matrix(3, ncol = 5, nrow = 7)
+  
+  expect_error(
+    muRty::get_k_best(mat, 2, algo = 'lp', by_rank = TRUE),
+    "Number of rows and number of columns are not equal. You need to provide a square matrix (N x N).",
+    fixed = TRUE
+  )
+  
+  mat <- matrix(3, ncol = 2, nrow = 2)
+  
+  expect_error(muRty::get_k_best(mat, 1, algo = 'lp', by_rank = TRUE), regexp = NA)
+  
+  expect_error(muRty::get_k_best(mat, 0, algo = 'lp', by_rank = TRUE), "You have provided an invalid value for k_best.")
+  
 })
 
 test_that("by_rank argument functions as expected (LP)", {
@@ -112,6 +149,8 @@ test_that("by_rank argument functions as expected (LP)", {
                      12L), .Dim = c(10L, 10L))
 
   test_by_rank <- muRty::get_k_best(mat, k_best = 3, by_rank = TRUE, algo = 'lp')
+  
+  expect_error(muRty::get_k_best(mat, 0, algo = 'lp', by_rank = TRUE), "You have provided an invalid value for k_best.")
   
   skip_on_cran()
 
@@ -239,7 +278,7 @@ test_that("muRty::get_k_best functions as expected with decimal weights (LP)", {
 
 # Hungarian
 
-test_that("muRty::get_k_best functions as expected with data frames and matrices (Hungarian)", {
+test_that("muRty::get_k_best functions as expected with data frames and matrices (Hungarian, by rank for conversion)", {
 
   mat <- read.table(
     text = "0 5 99
@@ -256,7 +295,11 @@ test_that("muRty::get_k_best functions as expected with data frames and matrices
                           costs = list(3, 7, 13, 15, 107))
 
   expect_equal(matTest, expectedOutput1)
+  
   expect_warning(muRty::get_k_best(mat, 5, algo = 'hungarian'),
+                 "You haven't provided an object of class matrix. Attempting to convert to matrix ..")
+  
+  expect_warning(muRty::get_k_best(mat, 5, algo = 'hungarian', by_rank = TRUE),
                  "You haven't provided an object of class matrix. Attempting to convert to matrix ..")
 
   matLarger <- as.matrix(
@@ -284,7 +327,7 @@ test_that("muRty::get_k_best functions as expected with data frames and matrices
 
 })
 
-test_that("muRty::get_k_best functions as expected with objective max and n_possible < k_best, no warning for n_possible == k_best (Hungarian)", {
+test_that("muRty::get_k_best functions as expected with objective max and n_possible < k_best (also for by_rank), no warning for n_possible == k_best (Hungarian)", {
 
   mat <- read.table(
     text = "0 5 99
@@ -297,16 +340,24 @@ test_that("muRty::get_k_best functions as expected with objective max and n_poss
   expectedOutput3 <- c(109, 107, 15, 13, 7, 3)
 
   expect_equal(matTest, expectedOutput3)
+  
+  matTestRank <- muRty::get_k_best(mat, 6, objective = 'max', algo = 'hungarian', by_rank = TRUE)
+  matTest <- unlist(matTestRank$costs)
+  expectedOutput4 <- c(109, 107, 15, 13, 7, 3)
+  
+  expect_equal(matTest, expectedOutput4)
 
   expect_warning(muRty::get_k_best(mat, 10, objective = 'max', algo = 'hungarian'),
                  paste0("There are only ", factorial(nrow(mat)), " possible solutions - terminating earlier.")
   )
+  
+  expect_warning(muRty::get_k_best(as.matrix(mat), 10, objective = 'max', algo = 'hungarian', by_rank = TRUE), regexp = NULL)
 
   expect_warning(muRty::get_k_best(as.matrix(mat), 6, objective = 'max', algo = 'hungarian'), regexp = NA)
 
 })
 
-test_that("muRty::get_k_best throws errors with 1x1 matrices, unequal dimensions, but no error for 2x2 (Hungarian)", {
+test_that("muRty::get_k_best throws errors with 1x1 matrices, unequal dimensions, k best < 1 but no error for 2x2 (Hungarian)", {
 
   mat <- matrix(3, ncol = 1, nrow = 1)
 
@@ -327,7 +378,35 @@ test_that("muRty::get_k_best throws errors with 1x1 matrices, unequal dimensions
   mat <- matrix(3, ncol = 2, nrow = 2)
 
   expect_error(muRty::get_k_best(mat, 1, algo = 'hungarian'), regexp = NA)
+  
+  expect_error(muRty::get_k_best(mat, 0, algo = 'hungarian'), "You have provided an invalid value for k_best.")
 
+})
+
+test_that("muRty::get_k_best throws errors with 1x1 matrices, unequal dimensions, k best < 1 but no error for 2x2 (Hungarian, by rank)", {
+  
+  mat <- matrix(3, ncol = 1, nrow = 1)
+  
+  expect_error(
+    muRty::get_k_best(mat, 2, algo = 'hungarian', by_rank = TRUE),
+    "Have you provided an empty set or matrix with only a single value? Your matrix should have at least 2 rows and 2 columns.",
+    fixed = TRUE
+  )
+  
+  mat <- matrix(3, ncol = 5, nrow = 7)
+  
+  expect_error(
+    muRty::get_k_best(mat, 2, algo = 'hungarian', by_rank = TRUE),
+    "Number of rows and number of columns are not equal. You need to provide a square matrix (N x N).",
+    fixed = TRUE
+  )
+  
+  mat <- matrix(3, ncol = 2, nrow = 2)
+  
+  expect_error(muRty::get_k_best(mat, 1, algo = 'hungarian', by_rank = TRUE), regexp = NA)
+  
+  expect_error(muRty::get_k_best(mat, 0, algo = 'hungarian', by_rank = TRUE), "You have provided an invalid value for k_best.")
+  
 })
 
 test_that("by_rank argument functions as expected (Hungarian)", {
@@ -342,6 +421,8 @@ test_that("by_rank argument functions as expected (Hungarian)", {
                      12L), .Dim = c(10L, 10L))
 
   test_by_rank <- muRty::get_k_best(mat, k_best = 3, by_rank = TRUE, algo = 'hungarian')
+  
+  expect_error(muRty::get_k_best(mat, 0, algo = 'hungarian', by_rank = TRUE), "You have provided an invalid value for k_best.")
 
   expectedOutput4 <- list(solutions = list(list(structure(c(0, 0, 0, 0, 1, 0, 0, 0,
                                                             0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -807,4 +888,23 @@ test_that("muRty::get_k_best functions as expected with negative values without 
   expect_equal(expectedOutput13, matTest)
   expect_equal(expectedOutput13, matTestLP)
 
+})
+
+
+test_that("muRty::get_k_best functions as expected with k_best > n_possible and number of ranks (additional tests; both LP and Hungarian)", {
+  
+  mat <- read.table(
+    text = "1 1 1
+      6 1 3
+      7 4 2",
+    header = FALSE)
+  
+  expect_warning(muRty::get_k_best(as.matrix(mat), 10, algo = 'lp', by_rank = TRUE), 
+                 "There are 6 possible solutions. Final solution has been found at rank number 4 which is lower than the k_best specified; terminating here."
+                 )
+  
+  expect_warning(muRty::get_k_best(as.matrix(mat), 10, algo = 'hungarian', by_rank = TRUE), 
+                 "There are 6 possible solutions. Final solution has been found at rank number 4 which is lower than the k_best specified; terminating here."
+                 )
+  
 })
