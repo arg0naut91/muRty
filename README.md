@@ -2,8 +2,6 @@ muRty
 ================
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-last-release/muRty)](https://cran.r-project.org/package=muRty)
-[![Travis build
-status](https://travis-ci.org/arg0naut91/muRty.svg?branch=master)](https://travis-ci.org/arg0naut91/muRty)
 [![Build
 status](https://ci.appveyor.com/api/projects/status/0bjhv26u337evtdw?svg=true)](https://ci.appveyor.com/project/arg0naut91/murty)
 [![codecov](https://codecov.io/gh/arg0naut91/muRty/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/muRty)
